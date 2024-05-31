@@ -98,7 +98,7 @@ const downloadReport = (index) => {
           pdf.text('sparshclinicdaltonganj@gmail.com', 40, 30);
           pdf.addImage(Microscope, 'PNG', 187, 12, 15, 15);
           pdf.text('sparsh clinic daltonganj', 150, 25);
-          pdf.text('PHARMACY, LAB, CLINIC', 150, 31);
+          pdf.text('PHARMACY, LAB, CLINIC', 150, 30);
         };
 
         // Custom footer
