@@ -13,7 +13,7 @@ function App() {
     age: '',
     prn: '',
     gender: 'M',
-    Sample_Colleted_On: '',
+    Sample_Collected_On: '',
     Sample_Out_On: '',
     referredBy: '',
     mainTestName: '',
@@ -59,7 +59,7 @@ function App() {
       age: '',
       prn: '',
       gender: 'M',
-      Sample_Colleted_On: '',
+      Sample_Collected_On: '',
       Sample_Out_On: '',
       referredBy: '',
       mainTestName: '',
@@ -105,6 +105,8 @@ function App() {
             pdf.text('PHARMACY, LAB, CLINIC', 142, 30);
             pdf.setLineWidth(1.5);
             pdf.line(10, 35, 200, 35);
+            pdf.setFontSize(10);
+            pdf.text(' ', 10, 40);
           };
 
           // Custom footer
@@ -228,29 +230,29 @@ function App() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-  <div>
-    <label className="block mb-1">Sample Date:</label>
-    <input
-      type="date"
-      name="Sample_Collected_On"
-      value={formData.Sample_Collected_On}
-      onChange={handleInputChange}
-      required
-      className="w-full p-2 border border-gray-300 rounded"
-    />
-  </div>
-  <div>
-    <label className="block mb-1">Report Date:</label>
-    <input
-      type="date"
-      name="Sample_out_On"
-      value={formData.Sample_out_On}
-      onChange={handleInputChange}
-      required
-      className="w-full p-2 border border-gray-300 rounded"
-    />
-  </div>
-</div>
+            <div>
+              <label className="block mb-1">Sample Date:</label>
+              <input
+                type="date"
+                name="Sample_Collected_On"
+                value={formData.Sample_Collected_On}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Report Date:</label>
+              <input
+                type="date"
+                name="Sample_Out_On"
+                value={formData.Sample_Out_On}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -399,118 +401,100 @@ function App() {
           ))}
         </div>
 
-        {showPreview && currentReport && (
-          <div
-            className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 "
-            ref={modalRef}
-          >
-            <div
-              ref={previewRef}
-              className="bg-white p-8 rounded shadow-lg w-3/4 max-h-full overflow-auto relative "
-            >
-              <div className="header flex justify-between items-center mb-4 ml-8 mr-8">
+        {showPreview && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 mb-8">
+            <div ref={modalRef} className="bg-white p-8 rounded-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+              <div ref={previewRef} className="preview-content pt-1 mb-0">
+                {currentReport && (
+                  <>
+                    <div className="flex flex-col-2 justify-center space-x-auto font-bold text-md p-2" style={{ backgroundColor: '#f5f5f5d0', border: '2px solid', borderRadius: '1rem', margin: '2rem' }} >
 
-
-              </div>
-              {/* <div className="flex justify-between mb-4 ml-4 mr-4">   */}
-              {/* Reduced ml and mr to 4 */}
-              {/* <h2 className="text-xl font-semibold  mr-8">Final Report</h2> */}
-              {/* <button
-    onClick={() => setShowPreview(false)}
-    className="px-4 py-2 bg-red-500 text-white rounded"
-  >
-    Close
-  </button> */}
-              {/* </div> */}
-              <div className="flex flex-col-2 justify-center space-x-80 mb-4 font-bold text-xl p-4" style={{ backgroundColor: '#f5f5f5d0', border: '2px solid',borderRadius:'1rem' }} >
-
-                <div>
-                  <p>
-                    <strong>PRN No: {currentReport.prn} </strong>
-                  </p>
-                  <p>
-                    <strong>Name: {currentReport.name}</strong>
-                  </p>
-                  <p>
-                    <strong>Age: {currentReport.age}y({currentReport.gender})</strong>
-                  </p>
-                  {/* <p>
+                      <div>
+                        <p>
+                          <strong>PRN No: {currentReport.prn} </strong>
+                        </p>
+                        <p>
+                          <strong>Name: {currentReport.name}</strong>
+                        </p>
+                        <p>
+                          <strong>Age: {currentReport.age}y({currentReport.gender})</strong>
+                        </p>
+                        {/* <p>
       <strong>Gender:</strong> {currentReport.gender}
     </p> */}
-                  <p>
-                    <strong>Referred By: {currentReport.referredBy} </strong>
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p>
-                    <strong>Sample Colleted On: {currentReport.Sample_Collected_On} </strong>
-                  </p>
-                  <p>
-                    <strong>Report Out On: {currentReport.Sample_Out_On}</strong>
-                  </p>
-                </div>
+                        <p>
+                          <strong>Referred By: {currentReport.referredBy} </strong>
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p>
+                          <strong>Sample Colleted On: {currentReport.Sample_Collected_On} </strong>
+                        </p>
+                        <p>
+                          <strong>Report Out On: {currentReport.Sample_Out_On}</strong>
+                        </p>
+                      </div>
+                    </div>
+
+
+                    {/* <div className="border border-gray-300 p-2 font-semibold text-2xl text-center">Main Test Name</div> */}
+                    <div className=" font-semibold text-5xl text-center pb-4">{currentReport.mainTestName}</div>
+
+
+                    {/* Result Table */}
+                    <div className="overflow-x-auto ml-8 mr-8">
+                      {/* <table className="w-full mt-16 border-collapse border-collapse border-gray-300"> */}
+                      <table className="w-full mt-8 text-lg" style={{ border: 'none' }}>
+                        <thead style={{ borderBottom: '3px solid', borderTop: '3px solid' }}>
+                          <tr>
+                            <th className="border border-gray-300 pb-8" style={{ border: 'none' }}>Test Name</th>
+                            <th className="border border-gray-300 pb-8" style={{ border: 'none' }}>Result</th>
+                            <th className="border border-gray-300 pb-8" style={{ border: 'none' }}>Units</th>
+                            <th className="border border-gray-300 pb-8" style={{ border: 'none' }}>Bio Ref Interval</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentReport.tests.map((test, index) => (
+                            <tr key={index}>
+                              <td className="border border-gray-300 p-2" style={{ border: 'none' }}>{test.testName}</td>
+                              <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval) ? 'bg-red-200 font-bold' : ''}`} style={{ border: 'none' }}>
+                                {test.result}
+                              </td>
+                              <td className="border border-gray-300 p-2" style={{ border: 'none' }}>{test.units}</td>
+                              <td className="border border-gray-300 p-2" style={{ border: 'none' }}>{test.bioRefInterval}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <h4 className='endLine'>-----End Of Report----</h4>
+                    <div className="flex justify-end  mt-8 space-x-20" style={{ marginRight: '4rem' }}>
+                      <div className="flex flex-col items-center">
+                        <img src={ManishSign} alt="Lab Technician" className="w-27 h-16 mb-1" />
+                        <p className="font-bold">LAB TECHNICIAN</p>
+                      </div>
+                      <div className="flex flex-col items-center h-40">
+                        <img src={DoctorSign} alt="Dr. Aubhuti Choudhary" className="w-29 h-16 mb-2 z-50" />
+                        <p className="font-bold">DR. Aubhuti Choudhary</p>
+                        <p>M.D Pathology</p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
+              <button
+                onClick={() => setShowPreview(false)}
+                className="bg-red-500 text-white p-2 rounded mt-4"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        )}
 
-
-              {/* <div className="border border-gray-300 p-2 font-semibold text-2xl text-center">Main Test Name</div> */}
-              <div className=" mt-8 p-2 font-semibold text-5xl text-center">{currentReport.mainTestName}</div>
-
-
-              {/* Result Table */}
-              <div className="overflow-x-auto ml-8 mr-8">
-                {/* <table className="w-full mt-16 border-collapse border-collapse border-gray-300"> */}
-                <table className="w-full mt-8 " style={{ border: 'none' }}>
-                  <thead style={{ borderBottom: '3px solid', borderTop: '3px solid' }}>
-                    <tr>
-                      <th className="border border-gray-300 p-2" style={{ border: 'none' }}>Test Name</th>
-                      <th className="border border-gray-300 p-2" style={{ border: 'none' }}>Result</th>
-                      <th className="border border-gray-300 p-2" style={{ border: 'none' }}>Units</th>
-                      <th className="border border-gray-300 p-2" style={{ border: 'none' }}>Bio Ref Interval</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentReport.tests.map((test, index) => (
-                      <tr key={index}>
-                        <td className="border border-gray-300 p-2" style={{ border: 'none' }}>{test.testName}</td>
-                        <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval) ? 'bg-red-200 font-bold' : ''}`} style={{ border: 'none' }}>
-                          {test.result}
-                        </td>
-                        <td className="border border-gray-300 p-2" style={{ border: 'none' }}>{test.units}</td>
-                        <td className="border border-gray-300 p-2" style={{ border: 'none' }}>{test.bioRefInterval}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className='overflow-y-auto' style={{ maxHeight: '80vh', paddingRight: '1rem' }}>
-  <div className='mt-2'>
-    <h4 className='endLine'>-----End Of Report----</h4>
-  </div>
-  <div className="flex justify-end mt-8 space-x-20">
-    <div className="flex flex-col items-center">
-      <img src={ManishSign} alt="Lab Technician" className="w-27 h-16 object-cover mb-2" />
-      <p className="font-bold">LAB TECHNICIAN</p>
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={DoctorSign} alt="Dr. Aubhuti Choudhary" className="w-29 h-16 object-cover mb-2" />
-      <p className="font-bold">DR. Aubhuti Choudhary</p>
-      <p className="text-center whitespace-normal">M.D Pathology</p>
-    </div>
-  </div>
-</div>
-
-
-             </div>
-
-           </div>
-
-)}
-
-       </div>
-
-     </>
-        );
-
+      </div>
+    </>
+  );
 }
 
- export default App;
+export default App;
