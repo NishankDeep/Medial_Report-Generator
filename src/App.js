@@ -407,7 +407,7 @@ function App() {
               <div ref={previewRef} className="preview-content pt-1 mb-0">
                 {currentReport && (
                   <>
-                    <div className="flex flex-col-2 justify-center space-x-auto font-bold text-md p-2" style={{ backgroundColor: '#f5f5f5d0', border: '2px solid', borderRadius: '1rem', margin: '2rem' }} >
+                    <div className="flex flex-col-2 justify-center space-x-60 font-bold text-md p-2" style={{ backgroundColor: '#f5f5f5d0', border: '2px solid', borderRadius: '1rem', margin: '2rem' }} >
 
                       <div>
                         <p>
