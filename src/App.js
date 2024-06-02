@@ -198,7 +198,7 @@ function App() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block mb-1">Age:</label>
               <input
@@ -228,27 +228,30 @@ function App() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <label className="block mb-1">Sample Colleted On : </label>
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1">Report Out On ::</label>
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
+  <div>
+    <label className="block mb-1">Sample Date:</label>
+    <input
+      type="date"
+      name="Sample_Collected_On"
+      value={formData.Sample_Collected_On}
+      onChange={handleInputChange}
+      required
+      className="w-full p-2 border border-gray-300 rounded"
+    />
+  </div>
+  <div>
+    <label className="block mb-1">Report Date:</label>
+    <input
+      type="date"
+      name="Sample_out_On"
+      value={formData.Sample_out_On}
+      onChange={handleInputChange}
+      required
+      className="w-full p-2 border border-gray-300 rounded"
+    />
+  </div>
+</div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block mb-1">Referred By:</label>
@@ -348,8 +351,8 @@ function App() {
               <p>Age: {report.age}</p>
               <p>PRN No.: {report.prn}</p>
               <p>Gender: {report.gender}</p>
-              <p>Date: {report.date}</p>
-              <p>Date: {report.date}</p>
+              <p>Sample Collected On: {report.Sample_Collected_On}</p>
+              <p>Report Out On: {report.Sample_Out_On}</p>
               <p>Referred By: {report.referredBy}</p>
               <p>{report.mainTestName}</p>
               <table className="w-full mt-4 border-collapse border border-gray-300">
@@ -440,10 +443,10 @@ function App() {
                 </div>
                 <div className="text-right">
                   <p>
-                    <strong>Sample Colleted On: {currentReport.date} </strong>
+                    <strong>Sample Colleted On: {currentReport.Sample_Collected_On} </strong>
                   </p>
                   <p>
-                    <strong>Report Out On: {currentReport.date}</strong>
+                    <strong>Report Out On: {currentReport.Sample_Out_On}</strong>
                   </p>
                 </div>
               </div>
@@ -479,29 +482,35 @@ function App() {
                   </tbody>
                 </table>
               </div>
-              <div className='overflow-y-hidden'>
-                <div className='mt-2'>
-                  <h4 className='endLine'>-----End Of Report----</h4>
-                </div>
-                <div className="flex justify-end  mt-8 space-x-20" style={{ marginRight: '4rem' }}>
-                  <div className="flex flex-col items-center">
-                    <img src={ManishSign} alt="Lab Technician" className="w-27 h-16 object-cover mb-2" />
-                    <p className="font-bold">LAB TECHNICIAN</p>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <img src={DoctorSign} alt="Dr. Aubhuti Choudhary" className="w-29 h-16 object-cover mb-2" />
-                    <p className="font-bold">DR. Aubhuti Choudhary</p>
-                    <p>M.D Pathology</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
+              <div className='overflow-y-auto' style={{ maxHeight: '80vh', paddingRight: '1rem' }}>
+  <div className='mt-2'>
+    <h4 className='endLine'>-----End Of Report----</h4>
+  </div>
+  <div className="flex justify-end mt-8 space-x-20">
+    <div className="flex flex-col items-center">
+      <img src={ManishSign} alt="Lab Technician" className="w-27 h-16 object-cover mb-2" />
+      <p className="font-bold">LAB TECHNICIAN</p>
+    </div>
+    <div className="flex flex-col items-center">
+      <img src={DoctorSign} alt="Dr. Aubhuti Choudhary" className="w-29 h-16 object-cover mb-2" />
+      <p className="font-bold">DR. Aubhuti Choudhary</p>
+      <p className="text-center whitespace-normal">M.D Pathology</p>
+    </div>
+  </div>
+</div>
+
+
+             </div>
+
+           </div>
+
+)}
+
+       </div>
+
+     </>
+        );
+
 }
 
-export default App;
-
+ export default App;
