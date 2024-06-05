@@ -4,8 +4,6 @@ import html2canvas from 'html2canvas';
 import './App.css';
 import MainLogo from './MainLogo.jpeg';
 import Microscope from './Microscope.png';
-import ManishSign from './ManishSign.jpg';
-import DoctorSign from './DoctorSign.PNG';
 import TestNameDropdown from './Select.js';
 import PatientInfoBox from './PatientInfo.js';
 import ResultTableContent from './ResultTable.js';
