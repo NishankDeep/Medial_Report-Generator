@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 
 const options = [
+  { value: ' ', label: ' ' },
   { value: 'Complete Body Test - CBC', label: 'Complete Body Test - CBC' },
   { value: 'Kidney Function Test - KFT', label: 'Kidney Function Test - KFT' },
   { value: 'Liver Function Tests - LFT', label: 'Liver Function Tests - LFT' },
@@ -9,6 +10,13 @@ const options = [
   { value: 'Hiv 1 & 2 rapid', label: 'Hiv 1 & 2 rapid' },
   { value: 'HBSAG', label: 'HBSAG' },
   { value: 'Glycosylated Haemoglobin - HbA1c', label: 'Glycosylated Haemoglobin - HbA1c' },
+  { value: 'RBS', label: 'RBS' },
+  { value: 'FBS', label: 'FBS' },
+  { value: 'FBS+PP', label: 'FBS+PP' },
+  { value: 'PP', label: 'PP' },
+  { value: 'Fasting Lipid Profile - FLP', label: 'Fasting Lipid Profile - FLP' },
+  { value: 'Prothombin Time-(PT/INR)', label: 'Prothombin Time-(PT/INR)' },
+  { value: 'HB%', label: 'HB%' },
   // Add more options as needed
 ];
 

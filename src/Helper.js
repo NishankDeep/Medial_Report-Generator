@@ -31,8 +31,9 @@ export const changeDollarToSpace = (data) => {
 
 export const setInitialTestDetail = (f) => {
   let initialData = [];
+  f=f.toLowerCase();
   // Note : when we want two data to be fit in once cell we need to seperate them as $ 
-  if (f.toLowerCase().includes("complete blood count") || f.toLowerCase().includes("cbc")) {
+  if (f.includes("complete blood count") || f.includes("cbc")) {
     initialData = [{ testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-16.7$Female:12.0-15.0' },
     { testName: 'Total WBC Count', result: '', units: 'Cells/cu mm', bioRefInterval: '4,100-11,100' },
     { testName: 'Lymphocytes', result: '', units: '%', bioRefInterval: '16-46' },
@@ -51,7 +52,7 @@ export const setInitialTestDetail = (f) => {
     { testName: 'PDW', result: '', units: '%', bioRefInterval: '11.0-18.0' },
     ]
   }
-  else if (f.toLowerCase().includes("kidney function test") || f.toLowerCase().includes("kft")) {
+  else if (f.includes("kidney function test") || f.includes("kft")) {
     initialData = [{ testName: 'Serum Creatinine', result: '', units: 'mg/dl', bioRefInterval: 'Men:0.6-1.4$Women:0.6-1.2' },
     { testName: 'Blood Urea', result: '', units: 'mg/dl', bioRefInterval: '13-45' },
     { testName: 'Serum Uric Acid', result: '', units: 'mg/dl', bioRefInterval: 'Men:3.6-7.2$Women:2.5-6.8' },
@@ -60,7 +61,7 @@ export const setInitialTestDetail = (f) => {
     { testName: 'Chloride', result: '', units: 'mmol/L ', bioRefInterval: '96-108' },
     ]
   }
-  else if (f.toLowerCase().includes("liver Function test") || f.toLowerCase().includes("lft")) {
+  else if (f.includes("liver Function test") || f.includes("lft")) {
     initialData = [
       { testName: 'Serum Bilirubin Total ', result: '', units: 'mg/dl', bioRefInterval: '0.1-1.2' },
       { testName: 'Serum Bilirubin Direct', result: '', units: 'mg/dl', bioRefInterval: '00-0.3' },
@@ -72,29 +73,77 @@ export const setInitialTestDetail = (f) => {
       { testName: 'Serum Protein-albumin ', result: '', units: 'mg/dl', bioRefInterval: '3.2-5.0' },
     ]
   }
-  else if (f.toLowerCase().includes("anti hcv") || f.toLowerCase().includes("hcv")) {
+  else if (f.includes("anti hcv") || f.includes("hcv")) {
     initialData = [
       { testName: 'Anti HCV', result: '', bioRefInterval: '' }
     ]
   }
-  else if (f.toLowerCase().includes("hiv")) {
+  else if (f.includes("hiv")) {
     initialData = [
       { testName: 'HIV 1', result: '', bioRefInterval: '' },
       { testName: 'HIV 2', result: '', bioRefInterval: '' }
     ]
   }
-  else if (f.toLowerCase().includes("hbsag")) {
+  else if (f.includes("hbsag")) {
     initialData = [
       { testName: 'Hbsag$ Method:CARD Method', result: '', units: '', bioRefInterval: '' },
     ]
   }
-  else if (f.toLowerCase().includes("glycosylated haemoglobin") || f.toLowerCase().includes('hba1c')) {
+  else if (f.includes("glycosylated haemoglobin") || f.includes('hba1c')) {
     initialData = [
       { testName: ' Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized', result: '',units:'', bioRefInterval: '5.0%-6.5%-Normal Non$Diabetic Level$7.0-9.0-Good Control (GOAL)$9.0 to 10.0-Fair Control$>10-Poor Control' },
-      { testName: 'Mean Blood Glucose (calculated from HbA1c)', result: '', units: '', bioRefInterval: '' },
-        
+      { testName: 'Mean Blood Glucose (calculated from HbA1c)', result: '', units: '', bioRefInterval: '' }, 
     ]
   }
+  else if (f.includes("rbs") ) {
+    initialData = [
+      { testName: 'Random Blood Sugar-RBS$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-140' }
+    ]
+
+  }
+  else if (f.includes("fbs") ) {
+    initialData = [
+      { testName: ' Fasting Blood Sugar-RBS$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-110' },  
+    ]
+  }
+  else if (f.includes("fbs+pp") ) {
+    initialData = [
+      { testName: ' Fasting Blood Sugar-RBS$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-110' },
+      { testName: ' Post Prandial-PP$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-140' },
+  
+    ]
+  }
+  else if (f.includes("pp") ) {
+    initialData = [
+      { testName: ' Post Prandial-PP$Method:GOD/POD Method ', result: '', units: 'mg/dl', bioRefInterval: '70-140' },
+    ]
+  }
+  else if (f.includes("fasting lipid profile") || f.includes('flp') ) {
+    initialData = [
+      { testName: 'Serum Total Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '130-250' },
+      { testName: 'Serum HDL Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '30-50' },
+      { testName: 'serum LDL Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '100-160' },
+      { testName: 'Serum VLDL Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '5-40' },
+      { testName: 'Serum Triglycerides', result: '', units: 'mg/dl ', bioRefInterval: '50-200' },
+      { testName: 'Total Cholesterol/HDL Ratio', result: '', units: '', bioRefInterval: 'Men:3.8-5.9$Women:3.1-4.6'},
+      { testName: 'LDL: HDL Ratio', result: '', units: '', bioRefInterval: 'Men-1.00;Average-3.55$Moderate-6.25;High-7.99'}, 
+    
+    ]
+  }
+  else if (f.includes("prothombin time") || f.includes('pt/inr') ) {
+    initialData = [
+      { testName: 'PT Test*(Citrated Plasma)$Method:(Automated Coagulometer)', result: '', units: 'sec', bioRefInterval: '10-14' },
+      { testName: 'R Value$ Method*(Derived)', result: '', units: '', bioRefInterval: '' },
+      { testName: 'INR (International Normalized Ratio$Method*(Derived) ', result: '', units: '', bioRefInterval: '0.9-1.4' },
+      
+    ]
+  }
+  else if (f.includes("hb%") || f.includes('hb') ) {
+    initialData = [
+      { testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-6.7$Female:12.0-15.0' },  
+    ]
+  }
+
 
 
   return initialData;
