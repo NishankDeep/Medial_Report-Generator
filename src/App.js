@@ -9,15 +9,15 @@ import DoctorSign from './DoctorSign.PNG';
 import TestNameDropdown from './Select.js';
 import PatientInfoBox from './PatientInfo.js';
 import ResultTableContent from './ResultTable.js';
-import { formatCellContent, changeStartingLetter, changeDollarToSpace, setInitialTestDetail } from './Helper.js';
+import { todayDate,formatCellContent, changeStartingLetter, changeDollarToSpace, setInitialTestDetail } from './Helper.js';
 
 const initialData = {
   name: '',
   age: '',
   prn: 'JHSCD',
   gender: 'M',
-  Sample_Collected_On: '',
-  Sample_Out_On: '',
+  Sample_Collected_On: todayDate(),
+  Sample_Out_On: todayDate(),
   referredBy: '',
   mainTestName: '',
   salutation: '',
@@ -43,7 +43,7 @@ function App() {
       Sample_Out_On: formattedDate
     }));
 
-  }, [formData])
+  }, [])
 
   // simply use to load the list of testname on change of maintestname
   useEffect(() => {
@@ -134,8 +134,6 @@ function App() {
             pdf.text('PHARMACY, LAB, CLINIC', 142, 30);
             pdf.setLineWidth(1.5);
             pdf.line(10, 35, 200, 35);
-            // pdf.setFontSize(10);
-            // pdf.text('aa', 10, 45);
           };
 
           // Custom footer
@@ -168,8 +166,8 @@ function App() {
             pageNumber++;
           }
 
-
-          pdf.save('report.pdf');
+          const pdfName = report.name + '.pdf'
+          pdf.save(`${pdfName}`);
           setShowPreview(false);
         });
       }

@@ -1,3 +1,9 @@
+export const todayDate = () => {
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  return formattedDate
+}
+
 export const formatCellContent = (bioRefInterval) => {
   // Assuming the values are separated by a space
   console.log("ghusa")
