@@ -6,19 +6,25 @@ import MainLogo from './MainLogo.jpeg';
 import Microscope from './Microscope.png';
 import ManishSign from './ManishSign.jpg';
 import DoctorSign from './DoctorSign.PNG';
+import TestNameDropdown from './Select.js';
+import PatientInfoBox from './PatientInfo.js';
+import ResultTableContent from './ResultTable.js';
+import { formatCellContent, changeStartingLetter, changeDollarToSpace, setInitialTestDetail } from './Helper.js';
+
+const initialData = {
+  name: '',
+  age: '',
+  prn: 'JHSCD',
+  gender: 'M',
+  Sample_Collected_On: '',
+  Sample_Out_On: '',
+  referredBy: '',
+  mainTestName: '',
+  salutation: '',
+}
 
 function App() {
-  const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    prn: '',
-    gender: 'M',
-    Sample_Collected_On: '',
-    Sample_Out_On: '',
-    referredBy: '',
-    mainTestName: '',
-    salutation:'',
-  });
+  const [formData, setFormData] = useState({...initialData});
 
   const [testDetails, setTestDetails] = useState([]);
   const [reports, setReports] = useState([]);
@@ -27,11 +33,37 @@ function App() {
   const previewRef = useRef();
   const modalRef = useRef();
 
+  // use to set the data to current date.
+  useEffect(() => {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      Sample_Collected_On: formattedDate,
+      Sample_Out_On: formattedDate
+    }));
+
+  }, [formData])
+
+  // simply use to load the list of testname on change of maintestname
+  useEffect(() => {
+    setTestDetails([...setInitialTestDetail(formData.mainTestName)]);
+  }, [formData.mainTestName])
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    if (e.target != null && e.target.name != null) {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleTestNameChange = (value) => {
     setFormData({
       ...formData,
-      [name]: value,
+      mainTestName: value,
     });
   };
 
@@ -51,21 +83,16 @@ function App() {
     setTestDetails(newTestDetails);
   };
 
+  const deleteReport = (index) => {
+    const newReports = reports.filter((_, i) => i !== index);
+    setReports(newReports);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newReport = { ...formData, tests: [...testDetails] };
     setReports([...reports, newReport]);
-    setFormData({
-      name: '',
-      age: '',
-      prn: '',
-      gender: 'M',
-      Sample_Collected_On: '',
-      Sample_Out_On: '',
-      referredBy: '',
-      mainTestName: '',
-      salutation: '',
-    });
+    setFormData({...initialData});
     setTestDetails([]);
   };
 
@@ -102,7 +129,7 @@ function App() {
             pdf.text('Sahitya Samaj Chowk, Jail road', 40, 20);
             pdf.text('Daltonganj, 822101', 40, 25);
             pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 30);
-            pdf.addImage(Microscope, 'PNG', 183, 12, 15, 15);
+            pdf.addImage(Microscope, 'PNG', 183.5, 10.5, 15, 15);
             pdf.text('Sparsh Clinic Daltonganj', 142, 25);
             pdf.text('PHARMACY, LAB, CLINIC', 142, 30);
             pdf.setLineWidth(1.5);
@@ -150,9 +177,6 @@ function App() {
   };
 
 
-
-
-
   useEffect(() => {
     if (showPreview) {
       const handleClickOutside = (event) => {
@@ -179,22 +203,22 @@ function App() {
         <h1 className="text-2xl font-bold mb-4">Medical Report Form</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1">Salutation:</label>
-            <select
-              name="salutation"
-              value={formData.salutation}
-              onChange={handleInputChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            >
-              <option value="">Select</option>
-              <option value="Mr.">Mr.</option>
-              <option value="Mrs.">Mrs.</option>
-              <option value="Miss">Miss</option>
-              <option value="Master">Master</option>
-            </select>
-          </div>
+            <div>
+              <label className="block mb-1">Salutation:</label>
+              <select
+                name="salutation"
+                value={formData.salutation}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              >
+                <option value="">Select</option>
+                <option value="Mr.">Mr.</option>
+                <option value="Mrs.">Mrs.</option>
+                <option value="Miss">Miss</option>
+                <option value="Master">Master</option>
+              </select>
+            </div>
             <div>
               <label className="block mb-1">Name:</label>
               <input
@@ -222,7 +246,7 @@ function App() {
             <div>
               <label className="block mb-1">Age:</label>
               <input
-                type="number"
+                type="text"
                 name="age"
                 value={formData.age}
                 onChange={handleInputChange}
@@ -273,38 +297,29 @@ function App() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1">Referred By:</label>
-            <select
-              name="referredBy"
-              value={formData.referredBy}
-              onChange={handleInputChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            >
-              <option value="">Select</option>
-              <option value="Dr.Anupam kr.singh">Dr.Anupam kr.singh</option>
-              <option value="Dr.Tusar Arya">Dr.Tusar Arya</option>
-              <option value="Dr.Kumar Prateek">Dr.Kumar Prateek</option>
-              <option value="Dr.Self">Dr.Self</option>
-              {/* <option value="Dr. Jones">Dr. Jones</option> */}
-            </select>
-          </div>
             <div>
-              <label className="block mb-1">Test Name:</label>
-              <input
-                type="text"
-                name="mainTestName"
-                value={formData.mainTestName}
+              <label className="block mb-1">Referred By:</label>
+              <select
+                name="referredBy"
+                value={formData.referredBy}
                 onChange={handleInputChange}
                 required
                 className="w-full p-2 border border-gray-300 rounded"
-              />
+              >
+                <option value="">Select</option>
+                <option value="Dr.Anupam kr.singh">Dr.Anupam kr.singh</option>
+                <option value="Dr.Tusar Arya">Dr.Tusar Arya</option>
+                <option value="Dr.Kumar Prateek">Dr.Kumar Prateek</option>
+                <option value="Dr.Self">Dr.Self</option>
+              </select>
+            </div>
+            <div>
+              <TestNameDropdown formData={formData} onTestNameChange={handleTestNameChange} />
+              <div>Selected Test Name: <strong>{formData.mainTestName}</strong></div>
             </div>
           </div>
           <div id="testDetailsContainer" className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Test Details</h3>
-            
             {testDetails.map((test, index) => (
               <div key={index} className="grid grid-cols-5 gap-4 mb-2">
                 <input
@@ -354,12 +369,12 @@ function App() {
             ))}
           </div>
           <button
-              type="button"
-              onClick={handleAddTestDetail}
-              className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Add Test Detail
-            </button>
+            type="button"
+            onClick={handleAddTestDetail}
+            className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Add Test Detail
+          </button>
           <button
             type="submit"
             className="px-4 py-2 bg-green-500 text-white rounded"
@@ -403,7 +418,7 @@ function App() {
                         {test.result}
                       </td>
                       <td className="border border-gray-300 p-2">{test.units}</td>
-                      <td className="border border-gray-300 p-2">{test.bioRefInterval}</td>
+                      <td className="border border-gray-300 p-2">{changeDollarToSpace(test.bioRefInterval)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -421,6 +436,12 @@ function App() {
                 >
                   Download PDF
                 </button>
+                <button
+                  onClick={() => deleteReport(index)}
+                  className="px-4 py-2 bg-red-500 text-white rounded"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -432,78 +453,11 @@ function App() {
               <div ref={previewRef} className="preview-content">
                 {currentReport && (
                   <>
-                    <div className="flex justify-between font-bold text-md p-2" style={{ backgroundColor: '#f5f5f5d0', borderRadius: '1rem', margin: '2rem' }} >
-
-                      <div>
-                        <p>
-                          <strong>PRN No: {currentReport.prn} </strong>
-                        </p>
-                        <p>
-                          <strong>Name: {currentReport.salutation} {currentReport.name}</strong>
-                        </p>
-                        <p>
-                          <strong>Age: {currentReport.age}y({currentReport.gender})</strong>
-                        </p>
-                        {/* <p>
-      <strong>Gender:</strong> {currentReport.gender}
-    </p> */}
-                        <p>
-                          <strong>Referred By: {currentReport.referredBy} </strong>
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p>
-                          <strong>Sample Colleted On: {currentReport.Sample_Collected_On} </strong>
-                        </p>
-                        <p>
-                          <strong>Report Out On: {currentReport.Sample_Out_On}</strong>
-                        </p>
-                      </div>
-                    </div>
-
-
-                    {/* <div className="border border-gray-300 p-2 font-semibold text-2xl text-center">Main Test Name</div> */}
-                    <div className=" font-semibold text-center pb-4" style={{marginBottom:'0',fontSize:'1rem', lineHeight:'0'}}>{currentReport.mainTestName}</div>
-
-
+                    {/* component that contain the info of patient */}
+                    <PatientInfoBox currentReport={currentReport} />
+                    <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{currentReport.mainTestName}</div>
                     {/* Result Table */}
-                    <div className="overflow-x-auto ml-8 mr-8" style={{paddingBottom:'0'}}>
-                      {/* <table className="w-full mt-16 border-collapse border-collapse border-gray-300"> */}
-                      <table className="w-full text-1xl" style={{ border: 'none', marginTop:'0'}}>
-                        <thead style={{ borderBottom: '3px solid', borderTop: '3px solid' }}>
-                          <tr>
-                            <th className="border border-gray-300 " style={{ border: 'none', paddingTop:'0px' }}>Test Name</th>
-                            <th className="border border-gray-300 " style={{ border: 'none',paddingTop:'0px' }}>Result</th>
-                            <th className="border border-gray-300 " style={{ border: 'none',paddingTop:'0px' }}>Units</th>
-                            <th className="border border-gray-300 " style={{ border: 'none' ,paddingTop:'0px' }}>Bio Ref Interval</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {currentReport.tests.map((test, index) => (
-                            <tr key={index}>
-                              <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none' ,whiteSpace: 'normal', wordWrap: 'break-word' ,maxWidth: '200px' }}>{test.testName}</td>
-                              <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval) ? 'bg-red-200 font-bold' : ''}`} style={{ border: 'none',whiteSpace: 'normal', wordWrap: 'break-word',maxWidth: '200px' }}>
-                                {test.result}
-                              </td>
-                              <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none' ,whiteSpace: 'normal', wordWrap: 'break-word',maxWidth: '200px'}}>{test.units}</td>
-                              <td className="border border-gray-300 p-2" style={{ border: 'none' ,whiteSpace: 'normal', wordWrap: 'break-word',maxWidth: '200px'}}>{test.bioRefInterval}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <h4 className='endLine'>-----End Of Report----</h4>
-                    <div className="flex justify-end  mt-8 space-x-40" style={{ marginRight: '4rem'  }}>
-                      <div className="flex flex-col items-center" style={{lineHeight:'0rem'}}>
-                        <img src={ManishSign} alt="Lab Technician" className="w-27 h-10" />
-                        <p className="font-bold" style={{fontSize:'0.7rem'}}>Lab Technician</p>
-                      </div>
-                      <div className="flex flex-col items-center h-40" style={{lineHeight:'1rem'}}>
-                        <img src={DoctorSign} alt="Dr. Aubhuti Choudhary" className="w-28 h-10 z-50" />
-                        <p className="font-bold" style={{fontSize:'0.7rem'}}>DR. Aubhuti Choudhary</p>
-                        <p className="font-bold" style={{fontSize:'0.7rem', lineHeight:'0.2rem'}}>M.D Pathology</p>
-                      </div>
-                    </div>
+                    <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
                   </>
                 )}
               </div>
