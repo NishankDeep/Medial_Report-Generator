@@ -32,8 +32,21 @@ export const changeStartingLetter = (name) => {
 }
 
 export const changeDollarToSpace = (data) => {
-  return data.replaceAll('$', ' ');
+  if(data!=null){
+    return data.replaceAll('$', ' ');
+  }
+  return data;
 }
+
+export const setInitialAgglutininTitreData = () => {
+  return [
+    { testName: 'S. TYPHI `H`',test1:'',test2:'',test3:'',test4:'',test5:'' },
+    { testName: 'S. TYPHI `O`',test1:'',test2:'',test3:'',test4:'',test5:'' },
+    { testName: 'S. PARATYPH `AH`',test1:'',test2:'',test3:'',test4:'',test5:'' },
+    { testName: 'S. PARATYPH `BH`',test1:'',test2:'',test3:'',test4:'',test5:'' },
+    { testName: 'The Test is : ',result:'' },
+  ];
+};
 
 export const setInitialTestDetail = (f) => {
   let initialData = [];
@@ -149,6 +162,12 @@ export const setInitialTestDetail = (f) => {
       { testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-6.7$Female:12.0-15.0' },  
     ]
   }
+
+  else if (f.includes("widal test (slide method)") || f.includes("typhoid")) {
+    initialData = setInitialAgglutininTitreData();
+  }
+
+
 
 
 
