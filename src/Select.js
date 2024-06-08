@@ -17,6 +17,7 @@ const options = [
   { value: 'Fasting Lipid Profile - FLP', label: 'Fasting Lipid Profile - FLP' },
   { value: 'Prothombin Time-(PT/INR)', label: 'Prothombin Time-(PT/INR)' },
   { value: 'HB%', label: 'HB%' },
+  { value: 'widal test (slide method)', label: 'widal test (slide method)' },
   // Add more options as needed
 ];
 
