@@ -60,7 +60,7 @@
 // import { formatCellContent, setInitialAgglutininTitreData } from "./Helper";
 
 
-// const AgglutininTitreTable = ({ data, handleChange, testResult, handleTestResultChange }) => {
+// const WidalTestBody = ({ data, handleChange, testResult, handleTestResultChange }) => {
 //     return (
 //         <>
 //             <h2 style={{textAlign:'center'}}><strong>Agglutinin Titre</strong></h2>
@@ -125,7 +125,7 @@
 //             <div className='transparent-bg'>
 //                 <div className="overflow-x-auto ml-8 mr-8" style={{ paddingBottom: '0' }}>
 //                     {isThyroidTest ? (
-//                         <AgglutininTitreTable
+//                         <WidalTestBody
 //                             data={agglutininData}
 //                             handleChange={handleChange}
 //                             testResult={testResult}
@@ -184,12 +184,12 @@ import ManishSign from './ManishSign.jpg';
 import DoctorSign from './DoctorSign.PNG';
 import { formatCellContent, setInitialAgglutininTitreData } from "./Helper";
 
-const AgglutininTitreTable = ({ data, testResult}) => {
+const WidalTestBody = ({ data, testResult}) => {
     return (
         <>
             <h2 className="text-center font-bold">Agglutinin Titre</h2>
-            <div className="overflow-x-auto">
-                <table className="w-full text-xl border-collapse" style={{ border: 'none' }} >
+            {/* <div className="overflow-x-auto"> */}
+                <table className="w-full h-full text-xl " style={{ height:'100%',border: 'none' }} >
                     <thead>
                         <tr >
                             <th className="p-2" style={{ border: 'none' }} > </th>
@@ -201,16 +201,6 @@ const AgglutininTitreTable = ({ data, testResult}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {data.map((test, rowIndex) => (
-                            <tr key={rowIndex}>
-                                <td className=" p-2"style={{ border: 'none'}} >{test.testName}</td>
-                                {test.titres.map((titre, colIndex) => (
-                                    <td className=" p-2"style={{ border: 'none'}}  key={colIndex}>
-                                        <input type="text" value={titre} onChange={(e) => handleChange(rowIndex, colIndex, e.target.value)} className="w-full" />
-                                    </td>
-                                ))}
-                            </tr>
-                        ))} */}
                         {data.tests.map((test, index) => (
                             test.testName.includes('The Test is :') ?
                              (<><tr className="result-row">
@@ -226,45 +216,60 @@ const AgglutininTitreTable = ({ data, testResult}) => {
                                 <td className="border" style={{ border: 'none' }}>{test.test3}</td>
                                 <td className="border" style={{ border: 'none' }}>{test.test4}</td>
                                 <td className="border" style={{ border: 'none' }}>{test.test5}</td>
-                                {/* <td className="border p-2 break-words max-w-xs">{formatCellContent(test.bioRefInterval)}</td> */}
-                            </tr></>)
+                               </tr></>)
                         ))}
                         
                     </tbody>
                 </table>
-            </div>
-            <div className="mt-4">
+            {/* </div> */}
+            <div className="mt-8" >
                 <p>Agglutination titre of greater than 1:80, considered significant & usually suggestive of infection.</p>
                 <p>A single positive result has less significance than the rising agglutination titre.</p>
-                <p>Note:- TEST RUN WITH NEGATIVE AND POSITIVE CONTROL</p>
+                <p >Note:- TEST RUN WITH NEGATIVE AND POSITIVE CONTROL</p>
             </div>
         </>
     );
 }
 
 export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
-    // const [agglutininData, setAgglutininData] = React.useState(setInitialAgglutininTitreData());
-    // const [testResult, setTestResult] = React.useState("");
-
-    // const handleChange = (rowIndex, colIndex, value) => {
-    //     const updatedData = [...agglutininData];
-    //     updatedData[rowIndex].titres[colIndex] = value;
-    //     setAgglutininData(updatedData);
-    // }
-
-    // const handleTestResultChange = (e) => {
-    //     setTestResult(e.target.value);
-    // }
-
-   // const isThyroidTest = currentReport.tests.some(test => test.testName.toLowerCase().includes("widal test (slide method)"));
-   const isThyroidTest = currentReport.mainTestName.toLowerCase().includes("widal test (slide method)");
+    const isThyroidTest = currentReport.mainTestName.toLowerCase().includes("widal test (slide method)");
 
     return (
         <>
-            <div className='transparent-bg'>
+            <div >
                 <div className="overflow-x-auto ml-8 mr-8" style={{ paddingBottom: '0' }}>
-                    {isThyroidTest ? (
-                        <AgglutininTitreTable
+                    {isThyroidTest && (
+                        <WidalTestBody
+                            data={currentReport}
+                            testResult={currentReport.result}
+                        />
+                    )}
+                    {!isThyroidTest && (
+                        <table className="w-full text-1xl" style={{ border: 'none', marginTop: '0' }}>
+                            <thead style={{ borderBottom: '3px solid', borderTop: '3px solid' }}>
+                                <tr>
+                                    <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Test Name</th>
+                                    <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Result</th>
+                                    <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Units</th>
+                                    <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Bio Ref Interval</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentReport.tests.map((test, index) => (
+                                    <tr key={index} style={{lineHeight:'0.3rem'}}>
+                                        <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{formatCellContent(test.testName)}</td>
+                                        <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
+                                            {test.result}
+                                        </td>
+                                        <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{test.units}</td>
+                                        <td className="border border-gray-300 p-2" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{formatCellContent(test.bioRefInterval)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                    {/* {isThyroidTest ? (
+                        <WidalTestBody
                             data={currentReport}
                             testResult={currentReport.result}
                         />
@@ -291,7 +296,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                                 ))}
                             </tbody>
                         </table>
-                    )}
+                    )} */}
                 </div>
                 <h4 className='endLine'>-----End Of Report----</h4>
                 <div className="flex justify-end mt-2 space-x-40" style={{ marginRight: '4rem' }}>

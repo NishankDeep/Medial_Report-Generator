@@ -4,10 +4,12 @@ import html2canvas from 'html2canvas';
 import './App.css';
 import MainLogo from './MainLogo.jpeg';
 import Microscope from './Microscope.png';
-import TestNameDropdown from './Select.js';
-import PatientInfoBox from './PatientInfo.js';
-import { ResultTableContent } from './ResultTable.js';
-import { todayDate, formatCellContent, changeStartingLetter, changeDollarToSpace, setInitialTestDetail } from './Helper.js';
+import PatientInfoBox from './PatientInfo.jsx';
+import FormMainInfo from './FormMainInfo.jsx';
+import TestDetailInput from './TestDetailInput.jsx';
+import DisplayPatientData from './DisplayPatientData.jsx';
+import { ResultTableContent } from './ResultTable.jsx';
+import { todayDate, setInitialTestDetail } from './Helper.jsx';
 
 const initialData = {
   name: '',
@@ -66,7 +68,7 @@ function App() {
   };
 
   const handleAddTestDetail = () => {
-    setTestDetails([...testDetails, { testName: '', result: '', units: '', bioRefInterval: '', test1: '', test2: '', test3: '', test4: '', test5: '', result: '' }]);
+    setTestDetails([...testDetails, { testName: '', result: '', units: '', bioRefInterval: '', test1: '', test2: '', test3: '', test4: '', test5: '' }]);
   };
 
   const handleTestDetailChange = (index, e) => {
@@ -201,288 +203,8 @@ function App() {
       <div className="App p-8">
         <h1 className="text-2xl font-bold mb-4">Medical Report Form</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1">Salutation:</label>
-              <select
-                name="salutation"
-                value={formData.salutation}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="">Select</option>
-                <option value="Mr.">Mr.</option>
-                <option value="Mrs.">Mrs.</option>
-                <option value="Miss">Miss</option>
-                <option value="Master">Master</option>
-              </select>
-            </div>
-            <div>
-              <label className="block mb-1">Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">PRN No.:</label>
-              <input
-                type="text"
-                name="prn"
-                value={formData.prn}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1">Age:</label>
-              <input
-                type="text"
-                name="age"
-                value={formData.age}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">Gender:</label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-                <option value="O">Other</option>
-              </select>
-            </div>
-            <div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1">Sample Date:</label>
-              <input
-                type="date"
-                name="Sample_Collected_On"
-                value={formData.Sample_Collected_On}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <label className="block mb-1">Report Date:</label>
-              <input
-                type="date"
-                name="Sample_Out_On"
-                value={formData.Sample_Out_On}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1">Referred By:</label>
-              <select
-                name="referredBy"
-                value={formData.referredBy}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="">Select</option>
-                <option value="Dr.Anupam kr.singh">Dr.Anupam kr.singh</option>
-                <option value="Dr.Tusar Arya">Dr.Tusar Arya</option>
-                <option value="Dr.Kumar Prateek">Dr.Kumar Prateek</option>
-                <option value="Dr.Self">Dr.Self</option>
-              </select>
-            </div>
-            <div>
-              <TestNameDropdown formData={formData} onTestNameChange={handleTestNameChange} />
-              <div>Selected Test Name: <strong>{formData.mainTestName}</strong></div>
-            </div>
-          </div>
-          {/* Render additional text boxes if the test is "Widal Test" */}
-          {/* {formData.mainTestName.includes('widal test (slide method)') && (
-            <>
-              <div className="grid grid-cols-1 gap-4">
-                <div>
-                  <label className="block mb-1">Test 1:</label>
-                  <input
-                    type="text"
-                    name="test1"
-                    value={formData.test1 || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1">Test 2:</label>
-                  <input
-                    type="text"
-                    name="test2"
-                    value={formData.test2 || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1">Test 3:</label>
-                  <input
-                    type="text"
-                    name="test3"
-                    value={formData.test3 || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1">Test 4:</label>
-                  <input
-                    type="text"
-                    name="test4"
-                    value={formData.test4 || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1">Test 5:</label>
-                  <input
-                    type="text"
-                    name="test5"
-                    value={formData.test5 || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-              </div>
-            </>
-          )} */}
-
-          <div id="testDetailsContainer" className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">Test Details</h3>
-            {testDetails.map((test, index) => (
-              <div key={index} className="grid grid-cols-5 gap-4 mb-2">
-
-                <input
-                  type="text"
-                  name="testName"
-                  value={test.testName}
-                  onChange={(e) => handleTestDetailChange(index, e)}
-                  placeholder="Test Name"
-                  required
-                  className="p-2 border border-gray-300 rounded"
-                />
-                {formData.mainTestName.includes('widal test (slide method)') == true ? (
-                  <>
-                  
-                    <input
-                      type="text"
-                      name={test.testName.includes("The Test is : ") ===true ? "result": "test1"}
-                      value={test.testName.includes("The Test is : ") ===true ? test.result : test.test1}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      className="p-2 border border-gray-300 rounded"
-                      placeholder={test.testName.includes("The Test is : ") ===true ? "Result": "Test 1"}
-                    />
-
-                    <input
-                      type="text"
-                      name="test2"
-                      value={test.test2}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      className="p-2 border border-gray-300 rounded"
-                      placeholder='Test 2'
-                      style={{ display: test.testName.includes("The Test is : ") !==true ? 'block' : 'none' }}
-                    />
-
-                    <input
-                      type="text"
-                      name="test3"
-                      value={test.test3}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      className="p-2 border border-gray-300 rounded"
-                      placeholder='Test 3'
-                      style={{ display: test.testName.includes("The Test is : ") !==true ? 'block' : 'none' }}
-                    />
-
-                    <input
-                      type="text"
-                      name="test4"
-                      value={test.test4}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      className="p-2 border border-gray-300 rounded"
-                      placeholder='Test 4'
-                      style={{ display: test.testName.includes("The Test is : ") !==true ? 'block' : 'none' }}
-                    />
-
-                    <input
-                      type="text"
-                      name="test5"
-                      value={test.test5}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      className="p-2 border border-gray-300 rounded"
-                      placeholder='Test 5'
-                      style={{ display: test.testName.includes("The Test is : ") !==true ? 'block' : 'none' }}
-                    />
-                  </>
-                )
-                  : (<>
-                    <input
-                      type="text"
-                      name="result"
-                      value={test.result}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      placeholder="Result"
-                      required
-                      className="p-2 border border-gray-300 rounded"
-                    />
-                    <input
-                      type="text"
-                      name="units"
-                      value={test.units}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      placeholder="Units"
-                      required
-                      className="p-2 border border-gray-300 rounded"
-                    />
-                    <input
-                      type="text"
-                      name="bioRefInterval"
-                      value={test.bioRefInterval}
-                      onChange={(e) => handleTestDetailChange(index, e)}
-                      placeholder="Bio Ref Interval"
-                      required
-                      className="p-2 border border-gray-300 rounded"
-                    />
-                  </>
-                  )}
-
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTestDetail(index)}
-                  className="px-4 py-2 bg-red-500 text-white rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
+          <FormMainInfo formData={formData} handleInputChange={handleInputChange} handleTestNameChange={handleTestNameChange} />
+          <TestDetailInput testDetails={testDetails} formData={formData} handleTestDetailChange={handleTestDetailChange} handleRemoveTestDetail={handleRemoveTestDetail}/>
           <button
             type="button"
             onClick={handleAddTestDetail}
@@ -497,7 +219,44 @@ function App() {
             Submit
           </button>
         </form>
-        <div id="reportsContainer" className="mt-8">
+
+        <DisplayPatientData reports={reports} previewReport={previewReport} downloadReport={downloadReport} deleteReport={deleteReport} isValueOutOfRange={isValueOutOfRange}/>
+
+        {showPreview && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 mb-8" >
+            <div ref={modalRef} className="bg-white p-8 rounded-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+              <div ref={previewRef} className="preview-content">
+                {currentReport && (
+                  <>
+                    {/* component that contain the info of patient */}
+                    <PatientInfoBox currentReport={currentReport} />
+                    <div className='transparent-bg'>
+                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{currentReport.mainTestName}</div>
+                      {/* Result Table */}
+                      <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
+                    </div>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={() => setShowPreview(false)}
+                className="bg-red-500 text-white p-2 rounded mt-4"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </>
+  );
+}
+
+export default App;
+
+
+{/* <div id="reportsContainer" className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Submitted Reports</h2>
           {reports.map((report, index) => (
             <div
@@ -560,39 +319,7 @@ function App() {
               </div>
             </div>
           ))}
-        </div>
-
-        {showPreview && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 mb-8" >
-            <div ref={modalRef} className="bg-white p-8 rounded-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-              <div ref={previewRef} className="preview-content">
-                {currentReport && (
-                  <>
-                    {/* component that contain the info of patient */}
-                    <PatientInfoBox currentReport={currentReport} />
-                    <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{currentReport.mainTestName}</div>
-                    {/* Result Table */}
-                    <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
-                  </>
-                )}
-              </div>
-              <button
-                onClick={() => setShowPreview(false)}
-                className="bg-red-500 text-white p-2 rounded mt-4"
-              >
-                Close Preview
-              </button>
-            </div>
-          </div>
-        )}
-
-      </div>
-    </>
-  );
-}
-
-export default App;
-
+        </div> */}
 
 // import React, { useState, useRef, useEffect } from 'react';
 // import jsPDF from 'jspdf';

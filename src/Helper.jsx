@@ -6,12 +6,11 @@ export const todayDate = () => {
 
 export const formatCellContent = (bioRefInterval) => {
   // Assuming the values are separated by a space
-  console.log("ghusa")
   const values = bioRefInterval.split('$');
   if (values.length > 1) {
     return values.map((value, index) => (
       <>
-        <span key={index}>
+        <span key={index} style={{lineHeight:'1rem'}}>
           {value}
         </span>
         <br />
