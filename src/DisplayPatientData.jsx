@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css'
 import { changeDollarToSpace } from "./Helper";
 import { WidalTestBody } from './ResultTable';
+import { UrineOputut } from './UrineInput';
 
 const DisplayPatientData = (prop) => {
     const {reports, previewReport, downloadReport, deleteReport, isValueOutOfRange} = prop;
@@ -22,10 +23,13 @@ const DisplayPatientData = (prop) => {
                         <p>Report Out On: {report.Sample_Out_On}</p>
                         <p>Referred By: {report.referredBy}</p>
                         <p>{report.mainTestName}</p>
+                        {report.mainTestName.toLowerCase().includes("urine") &&
+                            <UrineOputut report={report}/>
+                        }
                         {report.mainTestName.toLowerCase().includes("widal test (slide method)") &&
                             <WidalTestBody data={report}/>
                         }
-                        { !report.mainTestName.toLowerCase().includes("widal test (slide method)") &&
+                        { !report.mainTestName.toLowerCase().includes("urine") &&  !report.mainTestName.toLowerCase().includes("widal test (slide method)") &&
                            <table className="w-full mt-4 border-collapse border border-gray-300">
                             <thead>
                                 <tr>

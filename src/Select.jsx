@@ -18,6 +18,7 @@ const options = [
   { value: 'Prothombin Time-(PT/INR)', label: 'Prothombin Time-(PT/INR)' },
   { value: 'HB%', label: 'HB%' },
   { value: 'widal test (slide method)', label: 'widal test (slide method)' },
+  { value: 'REPORT ON THE EXAMINATION OF URINE', label: 'Urine' },
   // Add more options as needed
 ];
 

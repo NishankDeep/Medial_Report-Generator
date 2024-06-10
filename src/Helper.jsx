@@ -161,9 +161,34 @@ export const setInitialTestDetail = (f) => {
       { testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-6.7$Female:12.0-15.0' },  
     ]
   }
-
   else if (f.includes("widal test (slide method)") || f.includes("typhoid")) {
     initialData = setInitialAgglutininTitreData();
+  }
+  else if(f.includes('urine')){
+    initialData = {
+      test1:[
+        {testName:'volume', result:''},
+        {testName:'color', result:''},
+        {testName:'appearence', result:''},
+        {testName:'sediments', result:''},
+        {testName:'specific_gravity', result:''}
+      ],
+      test2:[
+        {testName:'ph', result:''},
+        {testName:'reaction', result:''},
+        {testName:'sugar', result:''},
+        {testName:'albumin', result:''},
+        {testName:'phosphate', result:''}
+      ],
+      test3:[
+        {testName:'erythrocytes', result:''},
+        {testName:'pus_cells', result:''},
+        {testName:'epithelial_cells', result:''},
+        {testName:'others', result:''},
+        {testName:'casts', result:''},
+        {testName:'crystals', result:''}
+      ],
+    }
   }
 
 
