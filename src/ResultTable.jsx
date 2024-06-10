@@ -184,20 +184,20 @@ import ManishSign from './ManishSign.jpg';
 import DoctorSign from './DoctorSign.PNG';
 import { formatCellContent, setInitialAgglutininTitreData } from "./Helper";
 
-const WidalTestBody = ({ data, testResult}) => {
+export const WidalTestBody = ({ data}) => {
     return (
         <>
             <h2 className="text-center font-bold">Agglutinin Titre</h2>
             {/* <div className="overflow-x-auto"> */}
-                <table className="w-full h-full text-xl " style={{ height:'100%',border: 'none' }} >
+                <table className="w-full h-full text-xl " style={{ height:'100%',border: 'none', lineHeight:'0.45rem'}} >
                     <thead>
                         <tr >
-                            <th className="p-2" style={{ border: 'none' }} > </th>
-                            <th className=" p-2" style={{ border: 'none' }} >2</th>
-                            <th className=" p-2" style={{ border: 'none' }} >3</th>
-                            <th className=" p-2" style={{ border: 'none' }} >4</th>
-                            <th className=" p-2" style={{ border: 'none' }} >5</th>
-                            <th className=" p-2" style={{ border: 'none' }} >6</th>
+                            <th className="p-2" style={{ border: 'none', textAlign:'center' }} > </th>
+                            <th className=" p-2" style={{ border: 'none', textAlign:'center' }} >1:20</th>
+                            <th className=" p-2" style={{ border: 'none', textAlign:'center' }} >1:40</th>
+                            <th className=" p-2" style={{ border: 'none', textAlign:'center' }} >1:80</th>
+                            <th className=" p-2" style={{ border: 'none', textAlign:'center' }} >1:160</th>
+                            <th className=" p-2" style={{ border: 'none', textAlign:'center' }} >1:320</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -210,12 +210,12 @@ const WidalTestBody = ({ data, testResult}) => {
                                 </td>
                             </tr></>) : 
                             ( <><tr key={index}>
-                                <td className="border" style={{ border: 'none' }}>{formatCellContent(test.testName)}</td>
-                                <td className="border" style={{ border: 'none' }}>{test.test1}</td>
-                                <td className="border" style={{ border: 'none' }}>{test.test2}</td>
-                                <td className="border" style={{ border: 'none' }}>{test.test3}</td>
-                                <td className="border" style={{ border: 'none' }}>{test.test4}</td>
-                                <td className="border" style={{ border: 'none' }}>{test.test5}</td>
+                                <td className="border font-bold" style={{ border: 'none',fontSize:'1.1rem' }}>{formatCellContent(test.testName)}</td>
+                                <td className="border" style={{ border: 'none' , textAlign:'center'}}>{test.test1}</td>
+                                <td className="border" style={{ border: 'none', textAlign:'center' }}>{test.test2}</td>
+                                <td className="border" style={{ border: 'none', textAlign:'center' }}>{test.test3}</td>
+                                <td className="border" style={{ border: 'none', textAlign:'center' }}>{test.test4}</td>
+                                <td className="border" style={{ border: 'none', textAlign:'center' }}>{test.test5}</td>
                                </tr></>)
                         ))}
                         
@@ -241,7 +241,6 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                     {isThyroidTest && (
                         <WidalTestBody
                             data={currentReport}
-                            testResult={currentReport.result}
                         />
                     )}
                     {!isThyroidTest && (
