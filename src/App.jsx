@@ -216,9 +216,10 @@ function App() {
       female: null,
       men: null,
       women: null,
+      general: null, // To handle generic range
     };
   
-    const parts = bioRefInterval.split(' ');
+    const parts = bioRefInterval.split('$');
     parts.forEach(part => {
       const lowerPart = part.toLowerCase();
       if (lowerPart.startsWith('male:')) {
@@ -229,33 +230,12 @@ function App() {
         intervals.men = part.slice(4).split('-').map(Number);
       } else if (lowerPart.startsWith('women:')) {
         intervals.women = part.slice(6).split('-').map(Number);
+      } else {
+        intervals.general = part.split('-').map(Number); // Handling general range
       }
     });
   
     return intervals;
-  };
-  
-  const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
-    if (bioRefInterval != null && bioRefInterval !== '') {
-      let min, max;
-      // const isAdult = parseInt(age, 10) >= 18;
-      const normalizedGender = normalizeGender(gender);
-  
-      const intervals = parseBioRefInterval(bioRefInterval);
-  
-      if (normalizedGender === 'male') {
-        [min, max] = intervals.male || intervals.men || [];
-      } else if (normalizedGender === 'female') {
-        [min, max] = intervals.female || intervals.women || [];
-      } else {
-        [min, max] = bioRefInterval.split('-').map(Number);
-      }
-  
-      if (min != null && max != null) {
-        return result < min || result > max;
-      }
-    }
-    return false;
   };
   
   const normalizeGender = (gender) => {
@@ -263,6 +243,28 @@ function App() {
     if (lowerGender === 'm' || lowerGender === 'male') return 'male';
     if (lowerGender === 'f' || lowerGender === 'female') return 'female';
     return null;
+  };
+  
+  const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
+    if (bioRefInterval != null && bioRefInterval !== '') {
+      let min, max;
+      const normalizedGender = normalizeGender(gender);
+  
+      const intervals = parseBioRefInterval(bioRefInterval);
+  
+      if (normalizedGender === 'male') {
+        [min, max] = intervals.male || intervals.men || intervals.general || [];
+      } else if (normalizedGender === 'female') {
+        [min, max] = intervals.female || intervals.women || intervals.general || [];
+      } else {
+        [min, max] = intervals.general || [];
+      }
+  
+      if (min != null && max != null) {
+        return result < min || result > max;
+      }
+    }
+    return false;
   };
 
   return (
