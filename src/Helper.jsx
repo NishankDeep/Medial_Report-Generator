@@ -6,20 +6,24 @@ export const todayDate = () => {
 
 export const formatCellContent = (bioRefInterval) => {
   // Assuming the values are separated by a space
-  const values = bioRefInterval.split('$');
-  if (values.length > 1) {
-    return values.map((value, index) => (
-      <>
-        <span key={index} style={{lineHeight:'1rem'}}>
-          {value}
-        </span>
-        <br />
-      </>
-    ));
+  if(bioRefInterval!=null){
+    const values = bioRefInterval.split('$');
+    if (values.length > 1) {
+      return values.map((value, index) => (
+        <>
+          <span key={index} style={{lineHeight:'1rem'}}>
+            {value}
+          </span>
+          <br />
+        </>
+      ));
+    }
+    else {
+      return bioRefInterval
+    }
   }
-  else {
-    return bioRefInterval
-  }
+
+  return bioRefInterval;
 };
 
 export const changeStartingLetter = (name) => {
@@ -189,6 +193,28 @@ export const setInitialTestDetail = (f) => {
         {testName:'crystals', result:''}
       ],
     }
+  }
+  else if (f.includes("e.s.r") ) {
+    initialData = [
+      { testName: 'First hr', result: '', units: 'mm/hr', bioRefInterval: '<20' },  
+    ]
+  }
+  else if (f.includes("trop-t") ) {
+    initialData = [
+      { testName: 'Trop-T Test', result: '', units: '', bioRefInterval: '' },  
+    ]
+  }
+  else if (f.includes("c-reactive protein") ) {
+    initialData = [
+      { testName: 'C-Reactive Protein', result: '', units: 'mg/dl', bioRefInterval: '0-5' },  
+      { testName: 'The Test Result', result: '', units: '', bioRefInterval: '' } 
+    ]
+  }
+  else if (f.includes("malaria parasite") ) {
+    initialData = [
+      { testName: 'P.Vivax - Antigen', result: '' },  
+      { testName: 'P.Falciparum', result: '' } 
+    ]
   }
 
 

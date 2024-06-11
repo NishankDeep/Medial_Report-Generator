@@ -19,6 +19,10 @@ const options = [
   { value: 'HB%', label: 'HB%' },
   { value: 'widal test (slide method)', label: 'widal test (slide method)' },
   { value: 'REPORT ON THE EXAMINATION OF URINE', label: 'Urine' },
+  { value: 'E.S.R', label: 'E.S.R' },
+  { value: 'TROP-T TEST', label: 'TROP-T TEST' },
+  { value: 'C-REACTIVE PROTEIN', label: 'C-REACTIVE PROTEIN' },
+  { value: 'Malaria Parasite', label: 'Malaria Parasite' },
   // Add more options as needed
 ];
 
