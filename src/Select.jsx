@@ -23,6 +23,7 @@ const options = [
   { value: 'TROP-T TEST', label: 'TROP-T TEST' },
   { value: 'C-REACTIVE PROTEIN', label: 'C-REACTIVE PROTEIN' },
   { value: 'Malaria Parasite', label: 'Malaria Parasite' },
+  { value: 'Optimal Test', label: 'Optimal Test' },
   // Add more options as needed
 ];
 

@@ -5,13 +5,14 @@ import ManishSign from './ManishSign.jpg';
 import DoctorSign from './DoctorSign.PNG';
 import { formatCellContent } from "./Helper";
 import { UrineOputut } from "./UrineInput";
+import { OptimalTestOputut } from "./OptimalTest";
 
 export const WidalTestBody = ({ data }) => {
     return (
         <>
             <h2 className="text-center font-bold">Agglutinin Titre</h2>
             {/* <div className="overflow-x-auto"> */}
-            <table className="w-full h-full text-xl " style={{ height: '100%', border: 'none', lineHeight: '0.45rem' }} >
+            <table className="w-full h-full text-xl " style={{ height: '100%', border: 'none', lineHeight: '0.45rem',fontSize:'1rem' }} >
                 <thead>
                     <tr >
                         <th className="p-2" style={{ border: 'none', textAlign: 'center' }} > </th>
@@ -25,14 +26,15 @@ export const WidalTestBody = ({ data }) => {
                 <tbody>
                     {data.tests.map((test, index) => (
                         test.testName.includes('The Test is :') ?
-                            (<><tr className="result-row">
+                            (<><tr className="result-row" style={{fontSize:'0.9rem'}}>
                                 <td className=" p-2 font-bold" style={{ border: 'none' }} >{test.testName}</td>
                                 <td className=" p-2 font-bold" style={{ border: 'none' }} colSpan="5">
                                     {test.result}
                                 </td>
                             </tr></>) :
-                            (<><tr key={index}>
-                                <td className="border font-bold" style={{ border: 'none', fontSize: '1.1rem' }}>{formatCellContent(test.testName)}</td>
+                            (<>
+                            <tr key={index} style={{fontSize:'1rem'}}>
+                                <td className="border" style={{ border: 'none' }}>{formatCellContent(test.testName)}</td>
                                 <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test1}</td>
                                 <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test2}</td>
                                 <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test3}</td>
@@ -44,7 +46,7 @@ export const WidalTestBody = ({ data }) => {
                 </tbody>
             </table>
             {/* </div> */}
-            <div className="mt-8" >
+            <div className="mt-4 ml-2" >
                 <p>Agglutination titre of greater than 1:80, considered significant & usually suggestive of infection.</p>
                 <p>A single positive result has less significance than the rising agglutination titre.</p>
                 <p >Note:- TEST RUN WITH NEGATIVE AND POSITIVE CONTROL</p>
@@ -56,6 +58,7 @@ export const WidalTestBody = ({ data }) => {
 export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
     const isThyroidTest = currentReport.mainTestName.toLowerCase().includes("widal test (slide method)");
     const isUrineTest = currentReport.mainTestName.toLowerCase().includes("urine");
+    const isOptimalTest = currentReport.mainTestName.toLowerCase().includes("optimal test");
     return (
         <>
             {/* <div style={{ paddingBottom: '2rem' }}> */}
@@ -68,8 +71,13 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                     </>
                 }
 
+                {isOptimalTest && 
+                    <>
+                        <OptimalTestOputut report={currentReport}/>
+                    </>
+                }
 
-                {!isUrineTest && <table className="w-full text-1xl" style={{ border: 'none', marginTop: '0' }}>
+                {!isUrineTest && !isOptimalTest && <table className="w-full text-1xl" style={{ border: 'none', marginTop: '0' }}>
                     <thead style={{ borderBottom: '3px solid', borderTop: '3px solid' }}>
                         <tr>
                             {isThyroidTest && <>
