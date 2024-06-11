@@ -46,7 +46,7 @@ const DisplayPatientData = (prop) => {
                                             <strong>{test.testName}</strong>
                                         </td>
                                         <td
-                                            className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval) ? 'bg-red-200' : ''}`}
+                                            className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval,report.gender,report.age) ? 'bg-red-200' : ''}`}
                                         >
                                             {test.result}
                                         </td>
