@@ -86,7 +86,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                                 {currentReport.tests.map((test, index) => (
                                     <tr key={index} style={{ lineHeight: '0.3rem' }}>
                                         <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{formatCellContent(test.testName)}</td>
-                                        <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
+                                        <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender,currentReport.age) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
                                             {test.result}
                                         </td>
                                         <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{test.units}</td>

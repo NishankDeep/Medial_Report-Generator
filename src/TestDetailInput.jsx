@@ -90,7 +90,7 @@ const TestDetailInput = (prop) => {
                                 value={test.units}
                                 onChange={(e) => handleTestDetailChange(index, e)}
                                 placeholder="Units"
-                                required
+                                
                                 className="p-2 border border-gray-300 rounded"
                             />
                             <input
@@ -99,7 +99,7 @@ const TestDetailInput = (prop) => {
                                 value={test.bioRefInterval}
                                 onChange={(e) => handleTestDetailChange(index, e)}
                                 placeholder="Bio Ref Interval"
-                                required
+                                
                                 className="p-2 border border-gray-300 rounded"
                             />
                         </>

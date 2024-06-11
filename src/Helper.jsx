@@ -190,6 +190,22 @@ export const setInitialTestDetail = (f) => {
       ],
     }
   }
+  else if (f.includes("e.s.r") ) {
+    initialData = [
+      { testName: 'First hr', result: '', units: 'mm/hr', bioRefInterval: '<20' },  
+    ]
+  }
+  else if (f.includes("trop-t") ) {
+    initialData = [
+      { testName: 'Trop-T Test', result: '', units: '', bioRefInterval: '' },  
+    ]
+  }
+  else if (f.includes("c-reactive protein") ) {
+    initialData = [
+      { testName: 'C-Reactive Protein', result: '', units: 'mg/dl', bioRefInterval: '0-5' },  
+      { testName: 'The Test Result', result: '', units: '', bioRefInterval: '' } 
+    ]
+  }
 
 
 

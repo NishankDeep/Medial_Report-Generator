@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './App.css';
-import MainLogo from './MainLogo.jpeg';
+import MainLogo from './MainLogo.png';
 import Microscope from './Microscope.png';
 import PatientInfoBox from './PatientInfo.jsx';
 import FormMainInfo from './FormMainInfo.jsx';
@@ -202,12 +202,67 @@ function App() {
   }, [showPreview]);
 
 
-  const isValueOutOfRange = (result, bioRefInterval) => {
-    if(bioRefInterval!=null && bioRefInterval!=''){
-      const [min, max] = bioRefInterval.split('-').map(Number);
-      return result < min || result > max;
+  // const isValueOutOfRange = (result, bioRefInterval) => {
+  //   if(bioRefInterval!=null && bioRefInterval!=''){
+  //     const [min, max] = bioRefInterval.split('-').map(Number);
+  //     return result < min || result > max;
+  //   }
+  //   return result;
+  // };
+
+  const parseBioRefInterval = (bioRefInterval) => {
+    const intervals = {
+      male: null,
+      female: null,
+      men: null,
+      women: null,
+    };
+  
+    const parts = bioRefInterval.split(' ');
+    parts.forEach(part => {
+      const lowerPart = part.toLowerCase();
+      if (lowerPart.startsWith('male:')) {
+        intervals.male = part.slice(5).split('-').map(Number);
+      } else if (lowerPart.startsWith('female:')) {
+        intervals.female = part.slice(7).split('-').map(Number);
+      } else if (lowerPart.startsWith('men:')) {
+        intervals.men = part.slice(4).split('-').map(Number);
+      } else if (lowerPart.startsWith('women:')) {
+        intervals.women = part.slice(6).split('-').map(Number);
+      }
+    });
+  
+    return intervals;
+  };
+  
+  const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
+    if (bioRefInterval != null && bioRefInterval !== '') {
+      let min, max;
+      // const isAdult = parseInt(age, 10) >= 18;
+      const normalizedGender = normalizeGender(gender);
+  
+      const intervals = parseBioRefInterval(bioRefInterval);
+  
+      if (normalizedGender === 'male') {
+        [min, max] = intervals.male || intervals.men || [];
+      } else if (normalizedGender === 'female') {
+        [min, max] = intervals.female || intervals.women || [];
+      } else {
+        [min, max] = bioRefInterval.split('-').map(Number);
+      }
+  
+      if (min != null && max != null) {
+        return result < min || result > max;
+      }
     }
-    return result;
+    return false;
+  };
+  
+  const normalizeGender = (gender) => {
+    const lowerGender = gender.toLowerCase();
+    if (lowerGender === 'm' || lowerGender === 'male') return 'male';
+    if (lowerGender === 'f' || lowerGender === 'female') return 'female';
+    return null;
   };
 
   return (
