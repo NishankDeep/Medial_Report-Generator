@@ -1,51 +1,51 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import './App.css'
 import { setInitialTestDetail } from "./Helper";
 
 
 const urineInput = {
-        test1:[
-          {testName:'volume', result:''},
-          {testName:'color', result:''},
-          {testName:'appearence', result:''},
-          {testName:'sediments', result:''},
-          {testName:'specific_gravity', result:''}
-        ],
-        test2:[
-          {testName:'ph', result:''},
-          {testName:'reaction', result:''},
-          {testName:'sugar', result:''},
-          {testName:'albumin', result:''},
-          {testName:'phosphate', result:''}
-        ],
-        test3:[
-          {testName:'erythrocytes', result:''},
-          {testName:'pus_cells', result:''},
-          {testName:'epithelial_cells', result:''},
-          {testName:'others', result:''},
-          {testName:'casts', result:''},
-          {testName:'crystals', result:''}
-        ],
-      
+    test1: [
+        { testName: 'volume', result: '' },
+        { testName: 'color', result: '' },
+        { testName: 'appearence', result: '' },
+        { testName: 'sediments', result: '' },
+        { testName: 'specific_gravity', result: '' }
+    ],
+    test2: [
+        { testName: 'ph', result: '' },
+        { testName: 'reaction', result: '' },
+        { testName: 'sugar', result: '' },
+        { testName: 'albumin', result: '' },
+        { testName: 'phosphate', result: '' }
+    ],
+    test3: [
+        { testName: 'erythrocytes', result: '' },
+        { testName: 'pus_cells', result: '' },
+        { testName: 'epithelial_cells', result: '' },
+        { testName: 'others', result: '' },
+        { testName: 'casts', result: '' },
+        { testName: 'crystals', result: '' }
+    ],
+
 }
 
 // component to take urine inputs....
-export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
+export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) => {
 
     useEffect(() => {
-          setUrineTestDetails(urineInput);
-      }, [formData.mainTestName])
+        setUrineTestDetails(urineInput);
+    }, [formData.mainTestName])
 
     const handleAddTest1Detail = () => {
-        setUrineTestDetails({...urineTestDetails,test1:[...urineTestDetails.test1,{testName:'',result:''}]});
+        setUrineTestDetails({ ...urineTestDetails, test1: [...urineTestDetails.test1, { testName: '', result: '' }] });
     };
-    
+
     const handleAddTest2Detail = () => {
-        setUrineTestDetails({...urineTestDetails,test2:[...urineTestDetails.test2,{testName:'',result:''}]});
+        setUrineTestDetails({ ...urineTestDetails, test2: [...urineTestDetails.test2, { testName: '', result: '' }] });
     };
-    
+
     const handleAddTest3Detail = () => {
-        setUrineTestDetails({...urineTestDetails,test3:[...urineTestDetails.test3,{testName:'',result:''}]});
+        setUrineTestDetails({ ...urineTestDetails, test3: [...urineTestDetails.test3, { testName: '', result: '' }] });
     };
 
     const handleTest1DetailChange = (index, e) => {
@@ -70,20 +70,20 @@ export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
     };
 
     const handleRemoveTest1Detail = (index) => {
-        let newTestDetails = {...urineTestDetails};
+        let newTestDetails = { ...urineTestDetails };
         newTestDetails.test1 = urineTestDetails.test1.filter((_, i) => i !== index);
         setUrineTestDetails(newTestDetails);
     };
 
     const handleRemoveTest2Detail = (index) => {
-        let newTestDetails = {...urineTestDetails};
+        let newTestDetails = { ...urineTestDetails };
         newTestDetails.test2 = urineTestDetails.test2.filter((_, i) => i !== index);
         setUrineTestDetails(newTestDetails);
     };
 
     const handleRemoveTest3Detail = (index) => {
-        let newTestDetails = {...urineTestDetails};
-         newTestDetails.test3 = urineTestDetails.test3.filter((_, i) => i !== index);
+        let newTestDetails = { ...urineTestDetails };
+        newTestDetails.test3 = urineTestDetails.test3.filter((_, i) => i !== index);
         setUrineTestDetails(newTestDetails);
     };
 
@@ -91,7 +91,7 @@ export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
         <>
             <div id="testDetailsContainer" className="mt-4">
                 <h3 className="text-lg font-semibold mb-2">Test Details</h3>
-                {urineTestDetails.test1.length>0 && <h4 className="text-lg font-semibold mb-2">PHYSICAL EXAMINATION </h4>}
+                {urineTestDetails.test1.length > 0 && <h4 className="text-lg font-semibold mb-2">PHYSICAL EXAMINATION </h4>}
                 {urineTestDetails.test1.map((test, index) => (
                     <div key={index} className="grid grid-cols-5 gap-4 mb-2">
                         <input
@@ -125,10 +125,10 @@ export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
                     type="button"
                     onClick={handleAddTest1Detail}
                     className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
-                    >
+                >
                     Add Test Detail1
-                    </button>
-                {urineTestDetails.test2.length>0 && <h4 className="text-lg font-semibold mb-2">CHEMICAL EXAMINATION </h4>}
+                </button>
+                {urineTestDetails.test2.length > 0 && <h4 className="text-lg font-semibold mb-2">CHEMICAL EXAMINATION </h4>}
                 {urineTestDetails.test2.map((test, index) => (
                     <div key={index} className="grid grid-cols-5 gap-4 mb-2">
                         <input
@@ -162,10 +162,10 @@ export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
                     type="button"
                     onClick={handleAddTest2Detail}
                     className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
-                    >
+                >
                     Add Test Detail2
                 </button>
-                {urineTestDetails.test3.length>0 && <h4 className="text-lg font-semibold mb-2">MICROSCOPIC EXAMINATION </h4>}
+                {urineTestDetails.test3.length > 0 && <h4 className="text-lg font-semibold mb-2">MICROSCOPIC EXAMINATION </h4>}
                 {urineTestDetails.test3.map((test, index) => (
                     <div key={index} className="grid grid-cols-5 gap-4 mb-2">
                         <input
@@ -199,15 +199,15 @@ export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
                     type="button"
                     onClick={handleAddTest3Detail}
                     className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
-                    >
+                >
                     Add Test Detail3
                 </button>
             </div>
             <button
-              type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded"
+                type="submit"
+                className="px-4 py-2 bg-green-500 text-white rounded"
             >
-              Submit
+                Submit
             </button>
         </>
     );
@@ -215,54 +215,54 @@ export const UrineInput = ({urineTestDetails,setUrineTestDetails,formData}) => {
 
 
 // compoenent to display urine output
-export const UrineOputut = ({report}) => {
+export const UrineOputut = ({ report }) => {
     return (
         <>
-            <table className="w-full  border-collapse border border-gray-300" style={{border:'none'}} >
+            <table className="w-full  border-collapse border border-gray-300" style={{ border: 'none' }} >
                 <tbody>
-                    <thead style={{border:'none', lineHeight:'1rem'}}>
-                        <tr className="font-bold"><td style={{fontSize:'1rem',border:'none'}}>Physical Examination</td></tr>
+                    <thead style={{ border: 'none', lineHeight: '1rem' }}>
+                        <tr className="font-bold"><td style={{ fontSize: '1rem', border: 'none' }}>Physical Examination</td></tr>
                     </thead>
                     {report.urineTests.test1.map((test, index) => (
-                        <tr key={index} style={{lineHeight:'0.3rem'}}>
-                            <td className="border border-gray-300 p-2" style={{border:'none'}}>
+                        <tr key={index} style={{ lineHeight: '0.3rem' }}>
+                            <td className="border border-gray-300 p-2" style={{ border: 'none' }}>
                                 {test.testName}
                             </td>
                             <td
                                 className={`border border-gray-300 p-2 font-bold`}
-                                style={{border:'none'}}
+                                style={{ border: 'none' }}
                             >
                                 : {test.result}
                             </td>
                         </tr>
                     ))}
-                    <thead style={{border:'none',lineHeight:'1rem'}}>
-                        <tr className="font-bold"><td style={{fontSize:'1rem',border:'none'}}>Chemical Examination</td></tr>
+                    <thead style={{ border: 'none', lineHeight: '1rem' }}>
+                        <tr className="font-bold"><td style={{ fontSize: '1rem', border: 'none' }}>Chemical Examination</td></tr>
                     </thead>
                     {report.urineTests.test2.map((test, index) => (
-                        <tr key={index} style={{lineHeight:'0.3rem'}}>
-                            <td className="border border-gray-300 p-2" style={{border:'none'}}>
+                        <tr key={index} style={{ lineHeight: '0.3rem' }}>
+                            <td className="border border-gray-300 p-2" style={{ border: 'none' }}>
                                 {test.testName}
                             </td>
                             <td
                                 className={`border border-gray-300 p-2 font-bold`}
-                                style={{border:'none'}}
+                                style={{ border: 'none' }}
                             >
                                 : {test.result}
                             </td>
                         </tr>
                     ))}
-                    <thead style={{border:'none',lineHeight:'1rem'}}>
-                        <tr className="font-bold"><td style={{fontSize:'1rem',border:'none'}}>Microscopic Examination</td></tr>
+                    <thead style={{ border: 'none', lineHeight: '1rem' }}>
+                        <tr className="font-bold"><td style={{ fontSize: '1rem', border: 'none' }}>Microscopic Examination</td></tr>
                     </thead>
                     {report.urineTests.test3.map((test, index) => (
-                        <tr key={index} style={{lineHeight:'0.3rem'}}>
-                            <td className="border border-gray-300 p-2" style={{border:'none'}}>
-                                {test.testName} 
+                        <tr key={index} style={{ lineHeight: '0.3rem' }}>
+                            <td className="border border-gray-300 p-2" style={{ border: 'none' }}>
+                                {test.testName}
                             </td>
                             <td
                                 className={`border border-gray-300 p-2 font-bold`}
-                                style={{border:'none'}}
+                                style={{ border: 'none' }}
                             >
                                 : {test.result}
                             </td>

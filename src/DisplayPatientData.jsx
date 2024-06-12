@@ -3,9 +3,10 @@ import './App.css'
 import { changeDollarToSpace } from "./Helper";
 import { WidalTestBody } from './ResultTable';
 import { UrineOputut } from './UrineInput';
+import { OptimalTestOputut } from './OptimalTest';
 
 const DisplayPatientData = (prop) => {
-    const {reports, previewReport, downloadReport, deleteReport, isValueOutOfRange} = prop;
+    const { reports, previewReport, downloadReport, deleteReport, isValueOutOfRange } = prop;
     return (
         <>
             <div id="reportsContainer" className="mt-8">
@@ -23,39 +24,42 @@ const DisplayPatientData = (prop) => {
                         <p>Report Out On: {report.Sample_Out_On}</p>
                         <p>Referred By: {report.referredBy}</p>
                         <p>{report.mainTestName}</p>
+                        {report.mainTestName.toLowerCase().includes('optimal test') &&
+                            <OptimalTestOputut report={report} />
+                        }
                         {report.mainTestName.toLowerCase().includes("urine") &&
-                            <UrineOputut report={report}/>
+                            <UrineOputut report={report} />
                         }
                         {report.mainTestName.toLowerCase().includes("widal test (slide method)") &&
-                            <WidalTestBody data={report}/>
+                            <WidalTestBody data={report} />
                         }
-                        { !report.mainTestName.toLowerCase().includes("urine") &&  !report.mainTestName.toLowerCase().includes("widal test (slide method)") &&
-                           <table className="w-full mt-4 border-collapse border border-gray-300">
-                            <thead>
-                                <tr>
-                                    <th className="border border-gray-300 p-2">Test Name</th>
-                                    <th className="border border-gray-300 p-2">Result</th>
-                                    <th className="border border-gray-300 p-2">Units</th>
-                                    <th className="border border-gray-300 p-2">Bio Ref Interval</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {report.tests.map((test, index) => (
-                                    <tr key={index}>
-                                        <td className="border border-gray-300 p-2">
-                                            <strong>{test.testName}</strong>
-                                        </td>
-                                        <td
-                                            className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval,report.gender,report.age) ? 'bg-red-200' : ''}`}
-                                        >
-                                            {test.result}
-                                        </td>
-                                        <td className="border border-gray-300 p-2">{test.units}</td>
-                                        <td className="border border-gray-300 p-2">{changeDollarToSpace(test.bioRefInterval)}</td>
+                        {!report.mainTestName.toLowerCase().includes('optimal test') && !report.mainTestName.toLowerCase().includes("urine") && !report.mainTestName.toLowerCase().includes("widal test (slide method)") &&
+                            <table className="w-full mt-4 border-collapse border border-gray-300">
+                                <thead>
+                                    <tr>
+                                        <th className="border border-gray-300 p-2">Test Name</th>
+                                        <th className="border border-gray-300 p-2">Result</th>
+                                        <th className="border border-gray-300 p-2">Units</th>
+                                        <th className="border border-gray-300 p-2">Bio Ref Interval</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {report.tests.map((test, index) => (
+                                        <tr key={index}>
+                                            <td className="border border-gray-300 p-2">
+                                                <strong>{test.testName}</strong>
+                                            </td>
+                                            <td
+                                                className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, report.gender, report.age) ? 'bg-red-200' : ''}`}
+                                            >
+                                                {test.result}
+                                            </td>
+                                            <td className="border border-gray-300 p-2">{test.units}</td>
+                                            <td className="border border-gray-300 p-2">{changeDollarToSpace(test.bioRefInterval)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         }
                         <div className="mt-4 flex justify-end space-x-2">
                             <button

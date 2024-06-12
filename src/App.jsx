@@ -10,7 +10,8 @@ import TestDetailInput from './TestDetailInput.jsx';
 import DisplayPatientData from './DisplayPatientData.jsx';
 import { ResultTableContent } from './ResultTable.jsx';
 import { todayDate, setInitialTestDetail } from './Helper.jsx';
-import {UrineInput} from './UrineInput.jsx';
+import { UrineInput } from './UrineInput.jsx';
+import { OptimalTestInput } from './OptimalTest.jsx';
 
 const initialData = {
   name: '',
@@ -26,16 +27,22 @@ const initialData = {
 
 
 const initialUrineInput = {
-  test1:[],
-  test2:[],
-  test3:[]
+  test1: [],
+  test2: [],
+  test3: []
+}
+
+const initialOptimalInput = {
+  test1: [],
+  test2: []
 }
 
 function App() {
   const [formData, setFormData] = useState({ ...initialData });
 
   const [testDetails, setTestDetails] = useState([]);
-  const [urineTestDetails,setUrineTestDetails] = useState(initialUrineInput);
+  const [urineTestDetails, setUrineTestDetails] = useState(initialUrineInput);
+  const [optimalTestDetails, setOptimalTestDetails] = useState(initialOptimalInput);
   const [reports, setReports] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
   const [currentReport, setCurrentReport] = useState(null);
@@ -56,7 +63,7 @@ function App() {
 
   // simply use to load the list of testname on change of maintestname
   useEffect(() => {
-    if(formData.mainTestName!=null && !formData.mainTestName.toLowerCase().includes('urine')){
+    if (formData.mainTestName != null && !formData.mainTestName.toLowerCase().includes('urine') && !formData.mainTestName.toLowerCase().includes('optimal test')) {
       setTestDetails([...setInitialTestDetail(formData.mainTestName)]);
     }
   }, [formData.mainTestName])
@@ -101,11 +108,13 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let newReport = { ...formData, tests: [...testDetails],urineTests:{...urineTestDetails} };
+    console.log("optimal", optimalTestDetails);
+    let newReport = { ...formData, tests: [...testDetails], urineTests: { ...urineTestDetails }, optimalTests: { ...optimalTestDetails } };
     setReports([...reports, newReport]);
     setFormData({ ...initialData });
     setTestDetails([]);
     setUrineTestDetails(initialUrineInput);
+    setOptimalTestDetails(initialOptimalInput);
   };
 
   const previewReport = (index) => {
@@ -216,9 +225,10 @@ function App() {
       female: null,
       men: null,
       women: null,
+      general: null, // To handle generic range
     };
-  
-    const parts = bioRefInterval.split(' ');
+
+    const parts = bioRefInterval.split('$');
     parts.forEach(part => {
       const lowerPart = part.toLowerCase();
       if (lowerPart.startsWith('male:')) {
@@ -229,40 +239,41 @@ function App() {
         intervals.men = part.slice(4).split('-').map(Number);
       } else if (lowerPart.startsWith('women:')) {
         intervals.women = part.slice(6).split('-').map(Number);
+      } else {
+        intervals.general = part.split('-').map(Number); // Handling general range
       }
     });
-  
+
     return intervals;
   };
-  
-  const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
-    if (bioRefInterval != null && bioRefInterval !== '') {
-      let min, max;
-      // const isAdult = parseInt(age, 10) >= 18;
-      const normalizedGender = normalizeGender(gender);
-  
-      const intervals = parseBioRefInterval(bioRefInterval);
-  
-      if (normalizedGender === 'male') {
-        [min, max] = intervals.male || intervals.men || [];
-      } else if (normalizedGender === 'female') {
-        [min, max] = intervals.female || intervals.women || [];
-      } else {
-        [min, max] = bioRefInterval.split('-').map(Number);
-      }
-  
-      if (min != null && max != null) {
-        return result < min || result > max;
-      }
-    }
-    return false;
-  };
-  
+
   const normalizeGender = (gender) => {
     const lowerGender = gender.toLowerCase();
     if (lowerGender === 'm' || lowerGender === 'male') return 'male';
     if (lowerGender === 'f' || lowerGender === 'female') return 'female';
     return null;
+  };
+
+  const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
+    if (bioRefInterval != null && bioRefInterval !== '') {
+      let min, max;
+      const normalizedGender = normalizeGender(gender);
+
+      const intervals = parseBioRefInterval(bioRefInterval);
+
+      if (normalizedGender === 'male') {
+        [min, max] = intervals.male || intervals.men || intervals.general || [];
+      } else if (normalizedGender === 'female') {
+        [min, max] = intervals.female || intervals.women || intervals.general || [];
+      } else {
+        [min, max] = intervals.general || [];
+      }
+
+      if (min != null && max != null) {
+        return result < min || result > max;
+      }
+    }
+    return false;
   };
 
   return (
@@ -271,16 +282,20 @@ function App() {
         <h1 className="text-2xl font-bold mb-4">Medical Report Form</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <FormMainInfo formData={formData} handleInputChange={handleInputChange} handleTestNameChange={handleTestNameChange} />
-          {formData.mainTestName.toLowerCase().includes('urine') && 
+          {formData.mainTestName.toLowerCase().includes('urine') &&
             <UrineInput urineTestDetails={urineTestDetails} setUrineTestDetails={setUrineTestDetails} formData={formData} />
           }
 
-          {!formData.mainTestName.toLowerCase().includes('urine') && <>
-            
-            <TestDetailInput 
-              testDetails={testDetails} 
-              formData={formData} 
-              handleTestDetailChange={handleTestDetailChange} 
+          {formData.mainTestName.toLowerCase().includes('optimal test') &&
+            <OptimalTestInput optimalTestDetails={optimalTestDetails} setOptimalTestDetails={setOptimalTestDetails} formData={formData} />
+          }
+
+          {!formData.mainTestName.toLowerCase().includes('urine') && !formData.mainTestName.toLowerCase().includes('optimal test') && <>
+
+            <TestDetailInput
+              testDetails={testDetails}
+              formData={formData}
+              handleTestDetailChange={handleTestDetailChange}
               handleRemoveTestDetail={handleRemoveTestDetail}
             />
             <button
@@ -300,7 +315,7 @@ function App() {
 
         </form>
 
-        <DisplayPatientData reports={reports} previewReport={previewReport} downloadReport={downloadReport} deleteReport={deleteReport} isValueOutOfRange={isValueOutOfRange}/>
+        <DisplayPatientData reports={reports} previewReport={previewReport} downloadReport={downloadReport} deleteReport={deleteReport} isValueOutOfRange={isValueOutOfRange} />
 
         {showPreview && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 mb-8" >
@@ -311,7 +326,7 @@ function App() {
                     {/* component that contain the info of patient */}
                     <PatientInfoBox currentReport={currentReport} />
                     <div className='transparent-bg' >
-                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{currentReport.mainTestName}</div>
+                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
                       {/* Result Table */}
                       <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
                     </div>

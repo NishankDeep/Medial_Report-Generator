@@ -58,8 +58,8 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                 />
             </>
         );
-    } 
-    else if(formData.mainTestName.toLowerCase().includes('malaria parasite')){
+    }
+    else if (formData.mainTestName.toLowerCase().includes('malaria parasite')) {
         displayOnScreenForInput = (
             <>
                 <input
@@ -73,7 +73,7 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                 />
             </>)
 
-    }else {
+    } else {
         displayOnScreenForInput = (
             <>
                 <input
