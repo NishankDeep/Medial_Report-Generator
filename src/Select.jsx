@@ -28,26 +28,26 @@ const options = [
 ];
 
 const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      minHeight: '30px',  // Adjust this value to set the desired height
-      height: '35px',
-      margin: '0px'
-    }),
-    valueContainer: (provided) => ({
-      ...provided,
-      height: '30px',
-      padding: '0 6px',
-    }),
-    input: (provided) => ({
-      ...provided,
-      margin: '0px',
-    }),
-    indicatorsContainer: (provided) => ({
-      ...provided,
-      height: '40px',
-    }),
-  };
+  control: (provided) => ({
+    ...provided,
+    minHeight: '30px',  // Adjust this value to set the desired height
+    height: '35px',
+    margin: '0px'
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    height: '30px',
+    padding: '0 6px',
+  }),
+  input: (provided) => ({
+    ...provided,
+    margin: '0px',
+  }),
+  indicatorsContainer: (provided) => ({
+    ...provided,
+    height: '40px',
+  }),
+};
 
 const TestNameDropdown = ({ formData, onTestNameChange }) => {
   const [inputValue, setInputValue] = useState(formData.mainTestName);
@@ -68,7 +68,7 @@ const TestNameDropdown = ({ formData, onTestNameChange }) => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-        // setInputValue(inputValue)
+      // setInputValue(inputValue)
       onTestNameChange(inputValue);
     }
   };

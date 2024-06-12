@@ -12,7 +12,7 @@ export const WidalTestBody = ({ data }) => {
         <>
             <h2 className="text-center font-bold">Agglutinin Titre</h2>
             {/* <div className="overflow-x-auto"> */}
-            <table className="w-full h-full text-xl " style={{ height: '100%', border: 'none', lineHeight: '0.45rem',fontSize:'1rem' }} >
+            <table className="w-full h-full text-xl " style={{ height: '100%', border: 'none', lineHeight: '0.45rem', fontSize: '1rem' }} >
                 <thead>
                     <tr >
                         <th className="p-2" style={{ border: 'none', textAlign: 'center' }} > </th>
@@ -26,21 +26,21 @@ export const WidalTestBody = ({ data }) => {
                 <tbody>
                     {data.tests.map((test, index) => (
                         test.testName.includes('The Test is :') ?
-                            (<><tr className="result-row" style={{fontSize:'0.9rem'}}>
+                            (<><tr className="result-row" style={{ fontSize: '0.9rem' }}>
                                 <td className=" p-2 font-bold" style={{ border: 'none' }} >{test.testName}</td>
                                 <td className=" p-2 font-bold" style={{ border: 'none' }} colSpan="5">
                                     {test.result}
                                 </td>
                             </tr></>) :
                             (<>
-                            <tr key={index} style={{fontSize:'1rem'}}>
-                                <td className="border" style={{ border: 'none' }}>{formatCellContent(test.testName)}</td>
-                                <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test1}</td>
-                                <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test2}</td>
-                                <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test3}</td>
-                                <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test4}</td>
-                                <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test5}</td>
-                            </tr></>)
+                                <tr key={index} style={{ fontSize: '1rem' }}>
+                                    <td className="border" style={{ border: 'none' }}>{formatCellContent(test.testName)}</td>
+                                    <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test1}</td>
+                                    <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test2}</td>
+                                    <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test3}</td>
+                                    <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test4}</td>
+                                    <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test5}</td>
+                                </tr></>)
                     ))}
 
                 </tbody>
@@ -71,9 +71,9 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                     </>
                 }
 
-                {isOptimalTest && 
+                {isOptimalTest &&
                     <>
-                        <OptimalTestOputut report={currentReport}/>
+                        <OptimalTestOputut report={currentReport} />
                     </>
                 }
 
@@ -83,14 +83,14 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                             {isThyroidTest && <>
                                 <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>
                                     <span>Test Name</span>
-                                    <span style={{marginLeft:"190px"}}>Result</span>
+                                    <span style={{ marginLeft: "190px" }}>Result</span>
                                 </th>
                             </>}
                             {!isThyroidTest && <>
-                            <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Test Name</th>
-                            <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Result</th>
-                            <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Units</th>
-                            <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Bio Ref Interval</th>
+                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Test Name</th>
+                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Result</th>
+                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Units</th>
+                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Bio Ref Interval</th>
                             </>}
                         </tr>
                     </thead>

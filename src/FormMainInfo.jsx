@@ -3,7 +3,7 @@ import TestNameDropdown from "./Select";
 
 
 const FormMainInfo = (prop) => {
-    const {formData, handleInputChange ,handleTestNameChange} = prop;
+    const { formData, handleInputChange, handleTestNameChange } = prop;
     return (
         <>
             <div className="grid grid-cols-2 gap-4">

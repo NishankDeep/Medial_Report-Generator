@@ -2,7 +2,7 @@
 import React from "react";
 import { changeStartingLetter } from "./Helper";
 
-const PatientInfoBox = ({currentReport}) => {
+const PatientInfoBox = ({ currentReport }) => {
     return (
         <>
             <div className="flex justify-between font-bold text-md p-2" style={{ backgroundColor: '#f5f5f5d0', borderRadius: '1rem', margin: '2rem' }} >
