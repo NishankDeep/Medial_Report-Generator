@@ -113,7 +113,7 @@ export const setInitialTestDetail = (f) => {
   }
   else if (f.includes("glycosylated haemoglobin") || f.includes('hba1c')) {
     initialData = [
-      { testName: ' Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized', result: '', units: '', bioRefInterval: '5.0%-6.5%-Normal Non$Diabetic Level$7.0-9.0-Good Control (GOAL)$9.0 to 10.0-Fair Control$>10-Poor Control' },
+      { testName: ' Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized', result: '', units: '', bioRefInterval: '5.0-6.5 Normal Non$Diabetic Level$7.0-9.0 Good Control (GOAL)$9.0 to 10.0 Fair Control$>10 Poor Control' },
       { testName: 'Mean Blood Glucose (calculated from HbA1c)', result: '', units: '', bioRefInterval: '' },
     ]
   }

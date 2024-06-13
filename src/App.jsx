@@ -194,7 +194,7 @@ function App() {
       }
     }, 500);
   };
-
+ 
 
   useEffect(() => {
     if (showPreview) {
@@ -221,17 +221,18 @@ function App() {
 
   const parseBioRefInterval = (bioRefInterval) => {
     const intervals = {
-      male: null,
-      female: null,
-      men: null,
-      women: null,
-      general: null, // To handle generic range
+      male: [],
+      female: [],
+      men: [],
+      women: [],
+      general: [], // To handle generic range
     };
   
     const parseRange = (range) => {
       range = range.trim().toLowerCase();
       let min = null;
       let max = null;
+  
       if (range.startsWith('upto <')) {
         max = parseFloat(range.slice(6).trim());
       } else if (range.startsWith('upto >')) {
@@ -243,24 +244,24 @@ function App() {
       } else if (range.startsWith('>')) {
         min = parseFloat(range.slice(1).trim());
       } else {
-        [min, max] = range.split('-').map(Number);
+        [min, max] = range.split('-').map(str => parseFloat(str.trim()));
       }
       return { min, max };
     };
   
-    const parts = bioRefInterval.split('$');
+    const parts = bioRefInterval.split(/(?<=\d)\s(?=\d)/); // Split at space between numeric segments
     parts.forEach(part => {
       const lowerPart = part.toLowerCase();
       if (lowerPart.startsWith('male:')) {
-        intervals.male = parseRange(part.slice(5));
+        intervals.male.push(parseRange(part.slice(5)));
       } else if (lowerPart.startsWith('female:')) {
-        intervals.female = parseRange(part.slice(7));
+        intervals.female.push(parseRange(part.slice(7)));
       } else if (lowerPart.startsWith('men:')) {
-        intervals.men = parseRange(part.slice(4));
+        intervals.men.push(parseRange(part.slice(4)));
       } else if (lowerPart.startsWith('women:')) {
-        intervals.women = parseRange(part.slice(6));
+        intervals.women.push(parseRange(part.slice(6)));
       } else {
-        intervals.general = parseRange(part);
+        intervals.general.push(parseRange(part));
       }
     });
   
@@ -276,30 +277,56 @@ function App() {
   
   const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
     if (bioRefInterval != null && bioRefInterval !== '') {
-      let min, max;
       const normalizedGender = normalizeGender(gender);
   
       const intervals = parseBioRefInterval(bioRefInterval);
+      let ranges = [];
   
       if (normalizedGender === 'male') {
-        ({ min, max } = intervals.male || intervals.men || intervals.general || {});
+        ranges = intervals.male.length ? intervals.male : intervals.men.length ? intervals.men : intervals.general;
       } else if (normalizedGender === 'female') {
-        ({ min, max } = intervals.female || intervals.women || intervals.general || {});
+        ranges = intervals.female.length ? intervals.female : intervals.women.length ? intervals.women : intervals.general;
       } else {
-        ({ min, max } = intervals.general || {});
+        ranges = intervals.general;
       }
   
-      if (min != null && max != null) {
-        return result < min || result > max;
-      } else if (min != null) {
-        return result < min;
-      } else if (max != null) {
-        return result > max;
+      for (const { min, max } of ranges) {
+        if ((min != null && result < min) || (max != null && result > max)) {
+          return true;
+        }
       }
     }
     return false;
   };
- 
+  
+  // Assuming `initialData` is defined elsewhere in your code
+  const checkHbA1cResults = (initialData, gender) => {
+    let isHbA1cOutOfRange = false;
+  
+    initialData.forEach(item => {
+      if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized')) {
+        if (isValueOutOfRange(parseFloat(item.result), item.bioRefInterval, gender)) {
+          isHbA1cOutOfRange = true;
+        }
+      }
+    });
+  
+    if (isHbA1cOutOfRange) {
+      initialData = initialData.map(item => {
+        if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized') || item.testName.includes('Mean Blood Glucose (calculated from HbA1c)')) {
+          return {
+            ...item,
+            bold: true, // Set a property to indicate it should be bold
+            color: 'red' // Set a property to indicate it should be red
+          };
+        }
+        return item;
+      });
+    }
+  
+    return initialData;
+  };
+   
   return (
     <>
       <div className="App p-8">
