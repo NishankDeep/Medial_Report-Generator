@@ -3,7 +3,7 @@ import Select from 'react-select';
 
 const options = [
   { value: ' ', label: ' ' },
-  { value: 'Complete Body Test - CBC', label: 'Complete Body Test - CBC' },
+  { value: 'Complete Blood Count - CBC', label: 'Complete Blood Count - CBC' },
   { value: 'Kidney Function Test - KFT', label: 'Kidney Function Test - KFT' },
   { value: 'Liver Function Tests - LFT', label: 'Liver Function Tests - LFT' },
   { value: 'Anti HCV', label: 'Anti HCV' },
