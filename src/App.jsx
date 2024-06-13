@@ -227,55 +227,79 @@ function App() {
       women: null,
       general: null, // To handle generic range
     };
-
+  
+    const parseRange = (range) => {
+      range = range.trim().toLowerCase();
+      let min = null;
+      let max = null;
+      if (range.startsWith('upto <')) {
+        max = parseFloat(range.slice(6).trim());
+      } else if (range.startsWith('upto >')) {
+        min = parseFloat(range.slice(6).trim());
+      } else if (range.startsWith('upto')) {
+        max = parseFloat(range.slice(4).trim());
+      } else if (range.startsWith('<')) {
+        max = parseFloat(range.slice(1).trim());
+      } else if (range.startsWith('>')) {
+        min = parseFloat(range.slice(1).trim());
+      } else {
+        [min, max] = range.split('-').map(Number);
+      }
+      return { min, max };
+    };
+  
     const parts = bioRefInterval.split('$');
     parts.forEach(part => {
       const lowerPart = part.toLowerCase();
       if (lowerPart.startsWith('male:')) {
-        intervals.male = part.slice(5).split('-').map(Number);
+        intervals.male = parseRange(part.slice(5));
       } else if (lowerPart.startsWith('female:')) {
-        intervals.female = part.slice(7).split('-').map(Number);
+        intervals.female = parseRange(part.slice(7));
       } else if (lowerPart.startsWith('men:')) {
-        intervals.men = part.slice(4).split('-').map(Number);
+        intervals.men = parseRange(part.slice(4));
       } else if (lowerPart.startsWith('women:')) {
-        intervals.women = part.slice(6).split('-').map(Number);
+        intervals.women = parseRange(part.slice(6));
       } else {
-        intervals.general = part.split('-').map(Number); // Handling general range
+        intervals.general = parseRange(part);
       }
     });
-
+  
     return intervals;
   };
-
+  
   const normalizeGender = (gender) => {
     const lowerGender = gender.toLowerCase();
     if (lowerGender === 'm' || lowerGender === 'male') return 'male';
     if (lowerGender === 'f' || lowerGender === 'female') return 'female';
     return null;
   };
-
+  
   const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
     if (bioRefInterval != null && bioRefInterval !== '') {
       let min, max;
       const normalizedGender = normalizeGender(gender);
-
+  
       const intervals = parseBioRefInterval(bioRefInterval);
-
+  
       if (normalizedGender === 'male') {
-        [min, max] = intervals.male || intervals.men || intervals.general || [];
+        ({ min, max } = intervals.male || intervals.men || intervals.general || {});
       } else if (normalizedGender === 'female') {
-        [min, max] = intervals.female || intervals.women || intervals.general || [];
+        ({ min, max } = intervals.female || intervals.women || intervals.general || {});
       } else {
-        [min, max] = intervals.general || [];
+        ({ min, max } = intervals.general || {});
       }
-
+  
       if (min != null && max != null) {
         return result < min || result > max;
+      } else if (min != null) {
+        return result < min;
+      } else if (max != null) {
+        return result > max;
       }
     }
     return false;
   };
-
+ 
   return (
     <>
       <div className="App p-8">
