@@ -11,8 +11,7 @@ export const WidalTestBody = ({ data }) => {
     return (
         <>
             <h2 className="text-center font-bold">Agglutinin Titre</h2>
-            {/* <div className="overflow-x-auto"> */}
-            <table className="w-full h-full text-xl " style={{ height: '100%', border: 'none', lineHeight: '0.45rem', fontSize: '1rem' }} >
+            <table className="w-full h-full text-xl" style={{ height: '100%', border: 'none', lineHeight: '0.45rem', fontSize: '1rem' }}>
                 <thead>
                     <tr  >
                         <th className="p-2" style={{ border: 'none', textAlign: 'center' }} > </th>
@@ -42,14 +41,12 @@ export const WidalTestBody = ({ data }) => {
                                     <td className="border" style={{ border: 'none', textAlign: 'center' }}>{test.test5}</td>
                                 </tr></>)
                     ))}
-
                 </tbody>
             </table>
-            {/* </div> */}
-            <div className="mt-4 ml-2" >
+            <div className="mt-4 ml-2">
                 <p>Agglutination titre of greater than 1:80, considered significant & usually suggestive of infection.</p>
                 <p>A single positive result has less significance than the rising agglutination titre.</p>
-                <p >Note:- TEST RUN WITH NEGATIVE AND POSITIVE CONTROL</p>
+                <p>Note:- TEST RUN WITH NEGATIVE AND POSITIVE CONTROL</p>
             </div>
         </>
     );
@@ -66,14 +63,11 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
     }
     
     return (
-        <>
-            {/* <div style={{ paddingBottom: '2rem' }}> */}
-            <div className="overflow-x-auto overflow-y-auto ml-8 mr-8" style={{ paddingBottom: '1rem' }} >
+        <div style={{ marginRight: '2rem', marginLeft: '2rem' }}> {/* Added margin-right here */}
+            <div className="overflow-x-auto overflow-y-auto ml-8 mr-12" style={{ paddingBottom: '2rem' }}>
                 {isUrineTest &&
                     <>
-                        <UrineOputut
-                            report={currentReport}
-                        />
+                        <UrineOputut report={currentReport} />
                     </>
                 }
 
@@ -87,23 +81,21 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                     <thead style={{ borderBottom: '3px solid', borderTop: '3px solid' }}>
                         <tr>
                             {isThyroidTest && <>
-                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>
+                                <th className="border border-gray-300" style={{ border: 'none', paddingTop: '0px' }}>
                                     <span>Test Name</span>
                                     <span style={{ marginLeft: "190px" }}>Result</span>
                                 </th>
                             </>}
                             {!isThyroidTest && <>
-                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Test Name</th>
-                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Result</th>
-                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Units</th>
-                                <th className="border border-gray-300 " style={{ border: 'none', paddingTop: '0px' }}>Bio Ref Interval</th>
+                                <th className="border border-gray-300" style={{ border: 'none', paddingTop: '0px' }}>Test Name</th>
+                                <th className="border border-gray-300" style={{ border: 'none', paddingTop: '0px' }}>Result</th>
+                                <th className="border border-gray-300" style={{ border: 'none', paddingTop: '0px' }}>Units</th>
+                                <th className="border border-gray-300" style={{ border: 'none', paddingTop: '0px' }}>Bio Ref Interval</th>
                             </>}
                         </tr>
                     </thead>
                     {isThyroidTest && (
-                        <WidalTestBody
-                            data={currentReport}
-                        />
+                        <WidalTestBody data={currentReport} />
                     )}
                     {!isUrineTest && !isThyroidTest &&
                         <tbody>
@@ -119,8 +111,6 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                             ))}
                         </tbody>}
                 </table>}
-
-
             </div>
             <h4 className='endLine'>-----End Of Report----</h4>
             <div className="flex justify-end mt-2 space-x-40" style={{ marginRight: '4rem' }}>
@@ -134,8 +124,6 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                     <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '0.2rem' }}>M.D Pathology</p>
                 </div>
             </div>
-            {/* </div> */}
-        </>
+        </div>
     );
 }
-
