@@ -221,7 +221,7 @@ export const OptimalTestOputut = ({ report }) => {
                 </thead>
                 <tbody>
                     {report.optimalTests.test2.map((test, index) => (
-                        <tr key={index} style={{ lineHeight: '0.3rem' }}>
+                        <tr key={index} style={{ lineHeight: '0.6rem' }}>
                             <td className="border border-gray-300 p-2" style={{ border: 'none', width: '35%' }}>
                                 {test.testName}
                             </td>

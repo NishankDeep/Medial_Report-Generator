@@ -93,6 +93,89 @@ function App() {
     const { name, value } = e.target;
     const newTestDetails = [...testDetails];
     newTestDetails[index][name] = value;
+
+    if(formData.mainTestName.toLowerCase().includes('hba1c')){
+      let val = parseFloat(value);
+      val = (val*35.6)-77.3;
+      newTestDetails[1]["result"] = val.toFixed(2);
+    }
+
+    if(formData.mainTestName.toLowerCase().includes("kft")){
+      if(index==1){
+        let val = parseFloat(value);
+        val = val/2.14;
+        newTestDetails[2]["result"] = val.toFixed(2);
+      }
+    }
+
+    if(formData.mainTestName.toLowerCase().includes("flp")){
+      if(index==4){
+        let val = parseFloat(value);
+        val = val/5;
+        newTestDetails[3]["result"] = val.toFixed(2);
+      }
+
+      if(newTestDetails[0]["result"].length > 0 && newTestDetails[1]["result"].length>0 && newTestDetails[3]["result"].length>0){
+        let total = parseFloat(newTestDetails[0]["result"]);
+        let hdl = parseFloat(newTestDetails[1]["result"]);
+        let vldl = parseFloat(newTestDetails[3]["result"]);
+        newTestDetails[2]["result"] = (total - hdl -vldl).toFixed(2);
+        newTestDetails[5]["result"] = (total/hdl).toFixed(2);
+      }
+      
+      if(newTestDetails[1]["result"].length>0 && newTestDetails[2]["result"].length>0){
+        let hdl = parseFloat(newTestDetails[1]["result"]);
+        let ldl = parseFloat(newTestDetails[2]["result"]);
+        newTestDetails[6]["result"] = (ldl/hdl).toFixed(2);
+      }
+      
+    }
+
+    if(formData.mainTestName.toLowerCase().includes("lft")){
+      if((newTestDetails[0]["result"].length > 0 && index==1)){
+        let total = parseFloat(newTestDetails[0]["result"]);
+        let direct =  parseFloat(value);
+        let ans = Math.abs(total-direct)
+        newTestDetails[2]["result"] = (ans).toFixed(2);
+      }
+      if(((newTestDetails[1]["result"].length > 0 && index==0))){
+        let total = parseFloat(value);
+        let direct =  parseFloat(newTestDetails[0]["result"]);
+        let ans = Math.abs(total-direct)
+        newTestDetails[2]["result"] = (ans).toFixed(2);
+      }
+    }
+    
+    if(formData.mainTestName.toLowerCase().includes("cbc")){
+      // hct
+      if((newTestDetails[5]["result"].length > 0 && newTestDetails[7]["result"].length > 0)){
+        // 6 -( 5 * 7 )/10
+        let rbcCount = parseFloat(newTestDetails[5]["result"]);
+        let hct =  parseFloat(newTestDetails[7]["result"]);
+        let ans = (rbcCount*hct)/10
+        newTestDetails[6]["result"] = (ans).toFixed(2);
+      }
+      
+      // mch
+      if((newTestDetails[0]["result"].length > 0 && newTestDetails[5]["result"].length>0)){
+        // 8 -( 0 * 10)/5
+        let hb = parseFloat(newTestDetails[0]["result"]);
+        let rbcCount =  parseFloat(newTestDetails[5]["result"]);
+        let ans = (hb*10)/rbcCount
+        newTestDetails[8]["result"] = (ans).toFixed(1);
+      }
+
+      // mchc
+      if((newTestDetails[0]["result"].length > 0 && newTestDetails[6]["result"].length>0)){
+        // 8 -( 0 * 10)/5
+        let hb = parseFloat(newTestDetails[0]["result"]);
+        let hct =  parseFloat(newTestDetails[6]["result"]);
+        let ans = (hb*100)/hct
+        newTestDetails[9]["result"] = (ans).toFixed(1);
+      }
+    }
+    
+    
     setTestDetails(newTestDetails);
   };
 
@@ -210,14 +293,6 @@ function App() {
     }
   }, [showPreview]);
 
-
-  // const isValueOutOfRange = (result, bioRefInterval) => {
-  //   if(bioRefInterval!=null && bioRefInterval!=''){
-  //     const [min, max] = bioRefInterval.split('-').map(Number);
-  //     return result < min || result > max;
-  //   }
-  //   return result;
-  // };
 
   const parseBioRefInterval = (bioRefInterval) => {
     const intervals = {
@@ -349,7 +424,7 @@ function App() {
                   <>
                     {/* component that contain the info of patient */}
                     <PatientInfoBox currentReport={currentReport} />
-                    <div className='transparent-bg' >
+                    <div className='transparent-bg' style={{ paddingBottom: '25%' }}>
                       <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
                       {/* Result Table */}
                       <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />

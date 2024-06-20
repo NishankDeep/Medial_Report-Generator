@@ -3,7 +3,7 @@ import './App.css';
 
 import ManishSign from './ManishSign.jpg';
 import DoctorSign from './DoctorSign.PNG';
-import { formatCellContent } from "./Helper";
+import { formatCellContent,isFontBold,formatCellContentBioRef } from "./Helper";
 import { UrineOputut } from "./UrineInput";
 import { OptimalTestOputut } from "./OptimalTest";
 
@@ -14,20 +14,20 @@ export const WidalTestBody = ({ data }) => {
             {/* <div className="overflow-x-auto"> */}
             <table className="w-full h-full text-xl " style={{ height: '100%', border: 'none', lineHeight: '0.45rem', fontSize: '1rem' }} >
                 <thead>
-                    <tr >
+                    <tr  >
                         <th className="p-2" style={{ border: 'none', textAlign: 'center' }} > </th>
-                        <th className=" p-2" style={{ border: 'none', textAlign: 'center' }} >1:20</th>
-                        <th className=" p-2" style={{ border: 'none', textAlign: 'center' }} >1:40</th>
-                        <th className=" p-2" style={{ border: 'none', textAlign: 'center' }} >1:80</th>
-                        <th className=" p-2" style={{ border: 'none', textAlign: 'center' }} >1:160</th>
-                        <th className=" p-2" style={{ border: 'none', textAlign: 'center' }} >1:320</th>
+                        <th className=" p-2" style={{ border: 'none', textAlign: 'center',width:'10%' }} >1:20</th>
+                        <th className=" p-2" style={{ border: 'none', textAlign: 'center',width:'10%' }} >1:40</th>
+                        <th className=" p-2" style={{ border: 'none', textAlign: 'center',width:'10%' }} >1:80</th>
+                        <th className=" p-2" style={{ border: 'none', textAlign: 'center',width:'10%' }} >1:160</th>
+                        <th className=" p-2" style={{ border: 'none', textAlign: 'center',width:'10%' }} >1:320</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.tests.map((test, index) => (
                         test.testName.includes('The Test is :') ?
                             (<><tr className="result-row" style={{ fontSize: '0.9rem' }}>
-                                <td className=" p-2 font-bold" style={{ border: 'none' }} >{test.testName}</td>
+                                <td className=" p-2 font-bold" style={{ border: 'none',width:'20%' }} >{test.testName}</td>
                                 <td className=" p-2 font-bold" style={{ border: 'none' }} colSpan="5">
                                     {test.result}
                                 </td>
@@ -59,10 +59,16 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
     const isThyroidTest = currentReport.mainTestName.toLowerCase().includes("widal test (slide method)");
     const isUrineTest = currentReport.mainTestName.toLowerCase().includes("urine");
     const isOptimalTest = currentReport.mainTestName.toLowerCase().includes("optimal test");
+    
+    let lineHeight = "1rem";
+    if(currentReport.mainTestName.toLowerCase().includes("cbc")){
+        lineHeight="0.8rem"
+    }
+    
     return (
         <>
             {/* <div style={{ paddingBottom: '2rem' }}> */}
-            <div className="overflow-x-auto overflow-y-auto ml-8 mr-8" style={{ paddingBottom: '2rem' }} >
+            <div className="overflow-x-auto overflow-y-auto ml-8 mr-8" style={{ paddingBottom: '1rem' }} >
                 {isUrineTest &&
                     <>
                         <UrineOputut
@@ -102,13 +108,13 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                     {!isUrineTest && !isThyroidTest &&
                         <tbody>
                             {currentReport.tests.map((test, index) => (
-                                <tr key={index} style={{ lineHeight: '0.4rem' }}>
-                                    <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px',lineHeight: '1rem' }}>{formatCellContent(test.testName)}</td>
+                                <tr key={index} style={{ lineHeight: `${lineHeight}` }}>
+                                    <td className={`border border-gray-300 p-2 ${isFontBold(test.testName) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px',lineHeight: '0.7rem' }}>{formatCellContent(test.testName)}</td>
                                     <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
                                         {test.result}
                                     </td>
                                     <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{test.units}</td>
-                                    <td className="border border-gray-300 p-2" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{formatCellContent(test.bioRefInterval)}</td>
+                                    <td className="border border-gray-300 p-2" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{formatCellContentBioRef(test.bioRefInterval)}</td>
                                 </tr>
                             ))}
                         </tbody>}
