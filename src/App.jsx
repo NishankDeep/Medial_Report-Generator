@@ -142,20 +142,21 @@ function App() {
 
           // Custom header
           const addHeader = (pdf, pageNumber) => {
-            pdf.addImage(MainLogo, 'JPEG', 10, 5, 25, 25);
+            pdf.addImage(MainLogo, 'JPEG', 10, 8, 25, 25); // Shifted down by 3 units
             pdf.setFontSize(40);
             pdf.setFont('helvetica', 'bold');
-            pdf.text('SPARSH LAB', 40, 15);
+            pdf.text('SPARSH LAB', 40, 18); // Shifted down by 3 units
             pdf.setFontSize(10);
-            pdf.text('Sahitya Samaj Chowk, Jail road', 40, 20);
-            pdf.text('Daltonganj, 822101', 40, 25);
-            pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 30);
-            pdf.addImage(Microscope, 'PNG', 183.5, 10.5, 15, 15);
-            pdf.text('Sparsh Clinic Daltonganj', 142, 25);
-            pdf.text('PHARMACY, LAB, CLINIC', 142, 30);
+            pdf.text('Sahitya Samaj Chowk, Jail road', 40, 23); // Shifted down by 3 units
+            pdf.text('Daltonganj, 822101', 40, 28); // Shifted down by 3 units
+            pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 33); // Shifted down by 3 units
+            pdf.addImage(Microscope, 'PNG', 183.5, 13.5, 15, 15); // Shifted down by 3 units
+            pdf.text('Sparsh Clinic Daltonganj', 142, 28); // Shifted down by 3 units
+            pdf.text('PHARMACY, LAB, CLINIC', 142, 33); // Shifted down by 3 units
             pdf.setLineWidth(1.5);
-            pdf.line(10, 35, 200, 35);
+            pdf.line(10, 38, 200, 38); // Shifted down by 3 units
           };
+          
 
           // Custom footer
           const addFooter = (pdf, pageNumber) => {
@@ -377,7 +378,7 @@ function App() {
                     {/* component that contain the info of patient */}
                     <PatientInfoBox currentReport={currentReport} />
                     <div className='transparent-bg' >
-                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
+                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0', paddingTop:'1rem'}}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
                       {/* Result Table */}
                       <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
                     </div>
