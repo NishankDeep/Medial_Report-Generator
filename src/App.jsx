@@ -452,14 +452,9 @@ function App() {
                   <>
                     {/* component that contain the info of patient */}
                     <PatientInfoBox currentReport={currentReport} />
-<<<<<<< HEAD
                     <div className='transparent-bg' style={{ paddingBottom: '25%' }}>
-                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
-=======
-                    <div className='transparent-bg' >
-                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0', paddingTop:'1rem'}}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
->>>>>>> abe82acc154d7b27b267d4997538504f375df8f0
-                      {/* Result Table */}
+                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0', paddingTop:'1rem' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
+                  {/* Result Table */}
                       <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
                     </div>
                   </>
