@@ -101,21 +101,21 @@ function App() {
     }
 
     if(formData.mainTestName.toLowerCase().includes("kft")){
-      if(index==1){
-        let val = parseFloat(value);
+      if(newTestDetails[1]["result"]!= null && newTestDetails[1]["result"].length > 0){
+        let val = parseFloat(newTestDetails[1]["result"]);
         val = val/2.14;
         newTestDetails[2]["result"] = val.toFixed(2);
       }
     }
 
     if(formData.mainTestName.toLowerCase().includes("flp")){
-      if(index==4){
-        let val = parseFloat(value);
+      if(newTestDetails[4]["result"]!= null && newTestDetails[4]["result"].length > 0){
+        let val = parseFloat(newTestDetails[4]["result"]);
         val = val/5;
         newTestDetails[3]["result"] = val.toFixed(2);
       }
 
-      if(newTestDetails[0]["result"].length > 0 && newTestDetails[1]["result"].length>0 && newTestDetails[3]["result"].length>0){
+      if(newTestDetails[0]["result"]!= null && newTestDetails[1]["result"]!=null  && newTestDetails[3]["result"]!=null &&  newTestDetails[0]["result"].length > 0 && newTestDetails[1]["result"].length>0 && newTestDetails[3]["result"].length>0){
         let total = parseFloat(newTestDetails[0]["result"]);
         let hdl = parseFloat(newTestDetails[1]["result"]);
         let vldl = parseFloat(newTestDetails[3]["result"]);
@@ -123,7 +123,7 @@ function App() {
         newTestDetails[5]["result"] = (total/hdl).toFixed(2);
       }
       
-      if(newTestDetails[1]["result"].length>0 && newTestDetails[2]["result"].length>0){
+      if(newTestDetails[1]["result"]!= null && newTestDetails[2]["result"]!=null && newTestDetails[1]["result"].length>0 && newTestDetails[2]["result"].length>0){
         let hdl = parseFloat(newTestDetails[1]["result"]);
         let ldl = parseFloat(newTestDetails[2]["result"]);
         newTestDetails[6]["result"] = (ldl/hdl).toFixed(2);
@@ -132,14 +132,8 @@ function App() {
     }
 
     if(formData.mainTestName.toLowerCase().includes("lft")){
-      if((newTestDetails[0]["result"].length > 0 && index==1)){
-        let total = parseFloat(newTestDetails[0]["result"]);
-        let direct =  parseFloat(value);
-        let ans = Math.abs(total-direct)
-        newTestDetails[2]["result"] = (ans).toFixed(2);
-      }
-      if(((newTestDetails[1]["result"].length > 0 && index==0))){
-        let total = parseFloat(value);
+      if(newTestDetails[1]["result"]!= null && newTestDetails[0]["result"]!=null && ((newTestDetails[1]["result"].length > 0 && newTestDetails[0]["result"].length > 0))){
+        let total = parseFloat(newTestDetails[1]["result"]);
         let direct =  parseFloat(newTestDetails[0]["result"]);
         let ans = Math.abs(total-direct)
         newTestDetails[2]["result"] = (ans).toFixed(2);
@@ -148,7 +142,7 @@ function App() {
     
     if(formData.mainTestName.toLowerCase().includes("cbc")){
       // hct
-      if((newTestDetails[5]["result"].length > 0 && newTestDetails[7]["result"].length > 0)){
+      if(newTestDetails[5]["result"]!= null && newTestDetails[7]["result"]!=null && (newTestDetails[5]["result"].length > 0 && newTestDetails[7]["result"].length > 0)){
         // 6 -( 5 * 7 )/10
         let rbcCount = parseFloat(newTestDetails[5]["result"]);
         let hct =  parseFloat(newTestDetails[7]["result"]);
@@ -157,7 +151,7 @@ function App() {
       }
       
       // mch
-      if((newTestDetails[0]["result"].length > 0 && newTestDetails[5]["result"].length>0)){
+      if(newTestDetails[5]["result"]!= null && newTestDetails[0]["result"]!=null && (newTestDetails[0]["result"].length > 0 && newTestDetails[5]["result"].length>0)){
         // 8 -( 0 * 10)/5
         let hb = parseFloat(newTestDetails[0]["result"]);
         let rbcCount =  parseFloat(newTestDetails[5]["result"]);
@@ -166,7 +160,7 @@ function App() {
       }
 
       // mchc
-      if((newTestDetails[0]["result"].length > 0 && newTestDetails[6]["result"].length>0)){
+      if(newTestDetails[6]["result"]!= null && newTestDetails[0]["result"]!=null && (newTestDetails[0]["result"].length > 0 && newTestDetails[6]["result"].length>0)){
         // 8 -( 0 * 10)/5
         let hb = parseFloat(newTestDetails[0]["result"]);
         let hct =  parseFloat(newTestDetails[6]["result"]);
@@ -301,7 +295,7 @@ function App() {
       female: [],
       men: [],
       women: [],
-      general: [], // To handle generic range
+      general: [],
     };
   
     const parseRange = (range) => {
@@ -325,7 +319,7 @@ function App() {
       return { min, max };
     };
   
-    const parts = bioRefInterval.split(/(?<=\d)\s(?=\d)/); // Split at space between numeric segments
+    const parts = bioRefInterval.split(/\s(?=[a-zA-Z]+:)/); // Split by spaces followed by gender labels
     parts.forEach(part => {
       const lowerPart = part.toLowerCase();
       if (lowerPart.startsWith('male:')) {
@@ -388,12 +382,14 @@ function App() {
     });
   
     if (isHbA1cOutOfRange) {
+      console.log(isHbA1cOutOfRange)
       initialData = initialData.map(item => {
         if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized') || item.testName.includes('Mean Blood Glucose (calculated from HbA1c)')) {
+          console.log("### ",isHbA1cOutOfRange)
           return {
             ...item,
-            bold: true, // Set a property to indicate it should be bold
-            color: 'red' // Set a property to indicate it should be red
+            bold: true,
+            color: 'red'
           };
         }
         return item;

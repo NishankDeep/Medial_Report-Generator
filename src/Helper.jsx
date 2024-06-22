@@ -11,7 +11,7 @@ export const formatCellContent = (bioRefInterval) => {
     if (values.length > 1) {
       return values.map((value, index) => (
         <>
-          <span key={index} style={{ lineHeight: '0rem' ,fontSize:`${ index==0 ? '1rem' : '0.5rem'}` }}>
+          <span key={index} style={{ lineHeight: '0.9rem' ,fontSize:`${ index==0 ? '1rem' : '0.5rem'}` }}>
             {value}
           </span>
           <br />
@@ -185,7 +185,7 @@ export const setInitialTestDetail = (f) => {
   }
   else if (f.includes("hb%") || f.includes('hb')) {
     initialData = [
-      { testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-6.7$Female:12.0-15.0' },
+      { testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-16.7$Female:12.0-15.0' },
     ]
   }
   else if (f.includes("widal test (slide method)") || f.includes("typhoid")) {

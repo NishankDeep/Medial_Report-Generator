@@ -63,7 +63,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
     }
     
     return (
-        <div style={{ marginRight: '2rem', marginLeft: '2rem' }}> {/* Added margin-right here */}
+        <div style={{ marginRight: '1rem', marginLeft: '1rem' }}> {/* Added margin-right here */}
             <div className="overflow-x-auto overflow-y-auto ml-8 mr-12" style={{ paddingBottom: '2rem' }}>
                 {isUrineTest &&
                     <>
@@ -101,7 +101,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                         <tbody>
                             {currentReport.tests.map((test, index) => (
                                 <tr key={index} style={{ lineHeight: `${lineHeight}` }}>
-                                    <td className={`border border-gray-300 p-2 ${isFontBold(test.testName) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px',lineHeight: '0.7rem' }}>{formatCellContent(test.testName)}</td>
+                                    <td className={`border border-gray-300 p-2 ${isFontBold(test.testName) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px'}}>{formatCellContent(test.testName)}</td>
                                     <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
                                         {test.result}
                                     </td>
