@@ -7,6 +7,16 @@ import { OptimalTestOputut } from './OptimalTest';
 
 const DisplayPatientData = (prop) => {
     const { reports, previewReport, downloadReport, deleteReport, isValueOutOfRange } = prop;
+    let ishab1ac = false;
+    reports.map((report) => {
+        report.tests.forEach(test => {   
+            if (test.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized')) {
+                if (isValueOutOfRange(test.result, test.bioRefInterval, report.gender, report.age)) {
+                    ishab1ac=true;
+                }
+            }
+        });
+    })
     return (
         <>
             <div id="reportsContainer" className="mt-8">
@@ -50,7 +60,7 @@ const DisplayPatientData = (prop) => {
                                                 <strong>{test.testName}</strong>
                                             </td>
                                             <td
-                                                className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, report.gender, report.age) ? 'bg-red-200' : ''}`}
+                                                className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, report.gender, report.age) || ishab1ac ? 'bg-red-200' : ''}`}
                                             >
                                                 {test.result}
                                             </td>

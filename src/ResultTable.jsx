@@ -53,10 +53,24 @@ export const WidalTestBody = ({ data }) => {
 }
 
 export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
+    // const [ishab1ac,setishb1ac] = useState(false);
     const isThyroidTest = currentReport.mainTestName.toLowerCase().includes("widal test (slide method)");
     const isUrineTest = currentReport.mainTestName.toLowerCase().includes("urine");
     const isOptimalTest = currentReport.mainTestName.toLowerCase().includes("optimal test");
     
+    // useEffect(() => {
+    //     setishb1ac(false);
+    // },[])
+
+    let ishab1ac = false;
+    currentReport.tests.forEach(test => {   
+        if (test.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized')) {
+            if (isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age)) {
+                ishab1ac=true;
+            }
+        }
+    });
+
     let lineHeight = "1rem";
     if(currentReport.mainTestName.toLowerCase().includes("cbc")){
         lineHeight="0.8rem"
@@ -102,7 +116,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                             {currentReport.tests.map((test, index) => (
                                 <tr key={index} style={{ lineHeight: `${lineHeight}` }}>
                                     <td className={`border border-gray-300 p-2 ${isFontBold(test.testName) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px'}}>{formatCellContent(test.testName)}</td>
-                                    <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
+                                    <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age) || ishab1ac ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
                                         {test.result}
                                     </td>
                                     <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{test.units}</td>
