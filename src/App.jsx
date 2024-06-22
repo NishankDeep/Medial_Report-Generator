@@ -93,6 +93,89 @@ function App() {
     const { name, value } = e.target;
     const newTestDetails = [...testDetails];
     newTestDetails[index][name] = value;
+
+    if(formData.mainTestName.toLowerCase().includes('hba1c')){
+      let val = parseFloat(value);
+      val = (val*35.6)-77.3;
+      newTestDetails[1]["result"] = val.toFixed(2);
+    }
+
+    if(formData.mainTestName.toLowerCase().includes("kft")){
+      if(index==1){
+        let val = parseFloat(value);
+        val = val/2.14;
+        newTestDetails[2]["result"] = val.toFixed(2);
+      }
+    }
+
+    if(formData.mainTestName.toLowerCase().includes("flp")){
+      if(index==4){
+        let val = parseFloat(value);
+        val = val/5;
+        newTestDetails[3]["result"] = val.toFixed(2);
+      }
+
+      if(newTestDetails[0]["result"].length > 0 && newTestDetails[1]["result"].length>0 && newTestDetails[3]["result"].length>0){
+        let total = parseFloat(newTestDetails[0]["result"]);
+        let hdl = parseFloat(newTestDetails[1]["result"]);
+        let vldl = parseFloat(newTestDetails[3]["result"]);
+        newTestDetails[2]["result"] = (total - hdl -vldl).toFixed(2);
+        newTestDetails[5]["result"] = (total/hdl).toFixed(2);
+      }
+      
+      if(newTestDetails[1]["result"].length>0 && newTestDetails[2]["result"].length>0){
+        let hdl = parseFloat(newTestDetails[1]["result"]);
+        let ldl = parseFloat(newTestDetails[2]["result"]);
+        newTestDetails[6]["result"] = (ldl/hdl).toFixed(2);
+      }
+      
+    }
+
+    if(formData.mainTestName.toLowerCase().includes("lft")){
+      if((newTestDetails[0]["result"].length > 0 && index==1)){
+        let total = parseFloat(newTestDetails[0]["result"]);
+        let direct =  parseFloat(value);
+        let ans = Math.abs(total-direct)
+        newTestDetails[2]["result"] = (ans).toFixed(2);
+      }
+      if(((newTestDetails[1]["result"].length > 0 && index==0))){
+        let total = parseFloat(value);
+        let direct =  parseFloat(newTestDetails[0]["result"]);
+        let ans = Math.abs(total-direct)
+        newTestDetails[2]["result"] = (ans).toFixed(2);
+      }
+    }
+    
+    if(formData.mainTestName.toLowerCase().includes("cbc")){
+      // hct
+      if((newTestDetails[5]["result"].length > 0 && newTestDetails[7]["result"].length > 0)){
+        // 6 -( 5 * 7 )/10
+        let rbcCount = parseFloat(newTestDetails[5]["result"]);
+        let hct =  parseFloat(newTestDetails[7]["result"]);
+        let ans = (rbcCount*hct)/10
+        newTestDetails[6]["result"] = (ans).toFixed(2);
+      }
+      
+      // mch
+      if((newTestDetails[0]["result"].length > 0 && newTestDetails[5]["result"].length>0)){
+        // 8 -( 0 * 10)/5
+        let hb = parseFloat(newTestDetails[0]["result"]);
+        let rbcCount =  parseFloat(newTestDetails[5]["result"]);
+        let ans = (hb*10)/rbcCount
+        newTestDetails[8]["result"] = (ans).toFixed(1);
+      }
+
+      // mchc
+      if((newTestDetails[0]["result"].length > 0 && newTestDetails[6]["result"].length>0)){
+        // 8 -( 0 * 10)/5
+        let hb = parseFloat(newTestDetails[0]["result"]);
+        let hct =  parseFloat(newTestDetails[6]["result"]);
+        let ans = (hb*100)/hct
+        newTestDetails[9]["result"] = (ans).toFixed(1);
+      }
+    }
+    
+    
     setTestDetails(newTestDetails);
   };
 
@@ -142,20 +225,21 @@ function App() {
 
           // Custom header
           const addHeader = (pdf, pageNumber) => {
-            pdf.addImage(MainLogo, 'JPEG', 10, 5, 25, 25);
+            pdf.addImage(MainLogo, 'JPEG', 10, 8, 25, 25); // Shifted down by 3 units
             pdf.setFontSize(40);
             pdf.setFont('helvetica', 'bold');
-            pdf.text('SPARSH LAB', 40, 15);
+            pdf.text('SPARSH LAB', 40, 18); // Shifted down by 3 units
             pdf.setFontSize(10);
-            pdf.text('Sahitya Samaj Chowk, Jail road', 40, 20);
-            pdf.text('Daltonganj, 822101', 40, 25);
-            pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 30);
-            pdf.addImage(Microscope, 'PNG', 183.5, 10.5, 15, 15);
-            pdf.text('Sparsh Clinic Daltonganj', 142, 25);
-            pdf.text('PHARMACY, LAB, CLINIC', 142, 30);
+            pdf.text('Sahitya Samaj Chowk, Jail road', 40, 23); // Shifted down by 3 units
+            pdf.text('Daltonganj, 822101', 40, 28); // Shifted down by 3 units
+            pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 33); // Shifted down by 3 units
+            pdf.addImage(Microscope, 'PNG', 183.5, 13.5, 15, 15); // Shifted down by 3 units
+            pdf.text('Sparsh Clinic Daltonganj', 142, 28); // Shifted down by 3 units
+            pdf.text('PHARMACY, LAB, CLINIC', 142, 33); // Shifted down by 3 units
             pdf.setLineWidth(1.5);
-            pdf.line(10, 35, 200, 35);
+            pdf.line(10, 38, 200, 38); // Shifted down by 3 units
           };
+          
 
           // Custom footer
           const addFooter = (pdf, pageNumber) => {
@@ -194,7 +278,7 @@ function App() {
       }
     }, 500);
   };
-
+ 
 
   useEffect(() => {
     if (showPreview) {
@@ -211,71 +295,114 @@ function App() {
   }, [showPreview]);
 
 
-  // const isValueOutOfRange = (result, bioRefInterval) => {
-  //   if(bioRefInterval!=null && bioRefInterval!=''){
-  //     const [min, max] = bioRefInterval.split('-').map(Number);
-  //     return result < min || result > max;
-  //   }
-  //   return result;
-  // };
-
   const parseBioRefInterval = (bioRefInterval) => {
     const intervals = {
-      male: null,
-      female: null,
-      men: null,
-      women: null,
-      general: null, // To handle generic range
+      male: [],
+      female: [],
+      men: [],
+      women: [],
+      general: [], // To handle generic range
     };
-
-    const parts = bioRefInterval.split('$');
+  
+    const parseRange = (range) => {
+      range = range.trim().toLowerCase();
+      let min = null;
+      let max = null;
+  
+      if (range.startsWith('upto <')) {
+        max = parseFloat(range.slice(6).trim());
+      } else if (range.startsWith('upto >')) {
+        min = parseFloat(range.slice(6).trim());
+      } else if (range.startsWith('upto')) {
+        max = parseFloat(range.slice(4).trim());
+      } else if (range.startsWith('<')) {
+        max = parseFloat(range.slice(1).trim());
+      } else if (range.startsWith('>')) {
+        min = parseFloat(range.slice(1).trim());
+      } else {
+        [min, max] = range.split('-').map(str => parseFloat(str.trim()));
+      }
+      return { min, max };
+    };
+  
+    const parts = bioRefInterval.split(/(?<=\d)\s(?=\d)/); // Split at space between numeric segments
     parts.forEach(part => {
       const lowerPart = part.toLowerCase();
       if (lowerPart.startsWith('male:')) {
-        intervals.male = part.slice(5).split('-').map(Number);
+        intervals.male.push(parseRange(part.slice(5)));
       } else if (lowerPart.startsWith('female:')) {
-        intervals.female = part.slice(7).split('-').map(Number);
+        intervals.female.push(parseRange(part.slice(7)));
       } else if (lowerPart.startsWith('men:')) {
-        intervals.men = part.slice(4).split('-').map(Number);
+        intervals.men.push(parseRange(part.slice(4)));
       } else if (lowerPart.startsWith('women:')) {
-        intervals.women = part.slice(6).split('-').map(Number);
+        intervals.women.push(parseRange(part.slice(6)));
       } else {
-        intervals.general = part.split('-').map(Number); // Handling general range
+        intervals.general.push(parseRange(part));
       }
     });
-
+  
     return intervals;
   };
-
+  
   const normalizeGender = (gender) => {
     const lowerGender = gender.toLowerCase();
     if (lowerGender === 'm' || lowerGender === 'male') return 'male';
     if (lowerGender === 'f' || lowerGender === 'female') return 'female';
     return null;
   };
-
+  
   const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
     if (bioRefInterval != null && bioRefInterval !== '') {
-      let min, max;
       const normalizedGender = normalizeGender(gender);
-
+  
       const intervals = parseBioRefInterval(bioRefInterval);
-
+      let ranges = [];
+  
       if (normalizedGender === 'male') {
-        [min, max] = intervals.male || intervals.men || intervals.general || [];
+        ranges = intervals.male.length ? intervals.male : intervals.men.length ? intervals.men : intervals.general;
       } else if (normalizedGender === 'female') {
-        [min, max] = intervals.female || intervals.women || intervals.general || [];
+        ranges = intervals.female.length ? intervals.female : intervals.women.length ? intervals.women : intervals.general;
       } else {
-        [min, max] = intervals.general || [];
+        ranges = intervals.general;
       }
-
-      if (min != null && max != null) {
-        return result < min || result > max;
+  
+      for (const { min, max } of ranges) {
+        if ((min != null && result < min) || (max != null && result > max)) {
+          return true;
+        }
       }
     }
     return false;
   };
-
+  
+  // Assuming `initialData` is defined elsewhere in your code
+  const checkHbA1cResults = (initialData, gender) => {
+    let isHbA1cOutOfRange = false;
+  
+    initialData.forEach(item => {
+      if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized')) {
+        if (isValueOutOfRange(parseFloat(item.result), item.bioRefInterval, gender)) {
+          isHbA1cOutOfRange = true;
+        }
+      }
+    });
+  
+    if (isHbA1cOutOfRange) {
+      initialData = initialData.map(item => {
+        if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized') || item.testName.includes('Mean Blood Glucose (calculated from HbA1c)')) {
+          return {
+            ...item,
+            bold: true, // Set a property to indicate it should be bold
+            color: 'red' // Set a property to indicate it should be red
+          };
+        }
+        return item;
+      });
+    }
+  
+    return initialData;
+  };
+   
   return (
     <>
       <div className="App p-8">
@@ -325,9 +452,9 @@ function App() {
                   <>
                     {/* component that contain the info of patient */}
                     <PatientInfoBox currentReport={currentReport} />
-                    <div className='transparent-bg' >
-                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
-                      {/* Result Table */}
+                    <div className='transparent-bg' style={{ paddingBottom: '25%' }}>
+                      <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0', paddingTop:'1rem' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
+                  {/* Result Table */}
                       <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
                     </div>
                   </>

@@ -3,11 +3,11 @@ import Select from 'react-select';
 
 const options = [
   { value: ' ', label: ' ' },
-  { value: 'Complete Body Test - CBC', label: 'Complete Body Test - CBC' },
-  { value: 'Kidney Function Test - KFT', label: 'Kidney Function Test - KFT' },
-  { value: 'Liver Function Tests - LFT', label: 'Liver Function Tests - LFT' },
-  { value: 'Anti HCV', label: 'Anti HCV' },
-  { value: 'Hiv 1 & 2 rapid', label: 'Hiv 1 & 2 rapid' },
+  { value: 'COMPLETE BLOOD COUNT - CBC', label: 'Complete Blood Count - CBC' },
+  { value: 'KIDNEY FUNCTION TEST - KFT', label: 'Kidney Function Test - KFT' },
+  { value: 'LIVER FUNCTION TESTS - LFT', label: 'Liver Function Tests - LFT' },
+  { value: 'Ant HCV', label: 'Anti HCV' },
+  { value: 'HIV 1 & 2 Rapid', label: 'Hiv 1 & 2 rapid' },
   { value: 'HBSAG', label: 'HBSAG' },
   { value: 'Glycosylated Haemoglobin - HbA1c', label: 'Glycosylated Haemoglobin - HbA1c' },
   { value: 'RBS', label: 'RBS' },
@@ -15,15 +15,15 @@ const options = [
   { value: 'FBS+PP', label: 'FBS+PP' },
   { value: 'PP', label: 'PP' },
   { value: 'Fasting Lipid Profile - FLP', label: 'Fasting Lipid Profile - FLP' },
-  { value: 'Prothombin Time-(PT/INR)', label: 'Prothombin Time-(PT/INR)' },
+  { value: 'PROTHOMBIN TIME-(PT/INR)', label: 'Prothombin Time-(PT/INR)' },
   { value: 'HB%', label: 'HB%' },
-  { value: 'widal test (slide method)', label: 'widal test (slide method)' },
+  { value: 'WIDAL TEST (slide method)', label: 'Widal Test (slide method)' },
   { value: 'REPORT ON THE EXAMINATION OF URINE', label: 'Urine' },
   { value: 'E.S.R', label: 'E.S.R' },
   { value: 'TROP-T TEST', label: 'TROP-T TEST' },
   { value: 'C-REACTIVE PROTEIN', label: 'C-REACTIVE PROTEIN' },
   { value: 'Malaria Parasite', label: 'Malaria Parasite' },
-  { value: 'Optimal Test', label: 'Optimal Test' },
+  { value: 'OPTIMAL TEST', label: 'Optimal Test' },
   // Add more options as needed
 ];
 

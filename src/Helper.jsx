@@ -11,7 +11,29 @@ export const formatCellContent = (bioRefInterval) => {
     if (values.length > 1) {
       return values.map((value, index) => (
         <>
-          <span key={index} style={{ lineHeight: '1rem' }}>
+          <span key={index} style={{ lineHeight: '0rem' ,fontSize:`${ index==0 ? '1rem' : '0.5rem'}` }}>
+            {value}
+          </span>
+          <br />
+        </>
+      ));
+    }
+    else {
+      return bioRefInterval
+    }
+  }
+
+  return bioRefInterval;
+};
+
+export const formatCellContentBioRef = (bioRefInterval) => {
+  // Assuming the values are separated by a space
+  if (bioRefInterval != null) {
+    const values = bioRefInterval.split('$');
+    if (values.length > 1) {
+      return values.map((value, index) => (
+        <>
+          <span key={index} style={{ lineHeight: '1rem'}}>
             {value}
           </span>
           <br />
@@ -56,12 +78,12 @@ export const setInitialTestDetail = (f) => {
   f = f.toLowerCase();
   // Note : when we want two data to be fit in once cell we need to seperate them as $ 
   if (f.includes("complete blood count") || f.includes("cbc")) {
-    initialData = [{ testName: 'Haemoglobin(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-16.7$Female:12.0-15.0' },
+    initialData = [{ testName: 'HAEMOGLOBIN(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-16.7$Female:12.0-15.0' },
     { testName: 'Total WBC Count', result: '', units: 'Cells/cu mm', bioRefInterval: '4,100-11,100' },
     { testName: 'Lymphocytes', result: '', units: '%', bioRefInterval: '16-46' },
     { testName: 'Monocytes', result: '', units: '%', bioRefInterval: '2.3-8.5' },
     { testName: 'Granulyocytes', result: '', units: '%', bioRefInterval: '48.7-81.2' },
-    { testName: 'R.B.C. COUNT', result: '', units: 'Million Cells/cu mm ', bioRefInterval: 'Women:3.90-5.20$Men:4.5-5.5' },
+    { testName: 'R.B.C. Count', result: '', units: 'Million Cells/cu mm ', bioRefInterval: 'Women:3.90-5.20$Men:4.5-5.5' },
     { testName: 'HCT', result: '', units: '% ', bioRefInterval: '36.4-46.0' },
     { testName: 'MCV', result: '', units: 'Fl ', bioRefInterval: '83-97' },
     { testName: 'MCH', result: '', units: 'pg ', bioRefInterval: '27-32' },
@@ -77,6 +99,7 @@ export const setInitialTestDetail = (f) => {
   else if (f.includes("kidney function test") || f.includes("kft")) {
     initialData = [{ testName: 'Serum Creatinine', result: '', units: 'mg/dl', bioRefInterval: 'Men:0.6-1.4$Women:0.6-1.2' },
     { testName: 'Blood Urea', result: '', units: 'mg/dl', bioRefInterval: '13-45' },
+    { testName: '(BUN)', result: '', units: 'mg/dl', bioRefInterval: '6-21' },
     { testName: 'Serum Uric Acid', result: '', units: 'mg/dl', bioRefInterval: 'Men:3.6-7.2$Women:2.5-6.8' },
     { testName: 'Potassium', result: '', units: 'mmol/L', bioRefInterval: '3.5-5.2' },
     { testName: 'Sodium', result: '', units: 'mmol/L', bioRefInterval: '136-145' },
@@ -88,8 +111,8 @@ export const setInitialTestDetail = (f) => {
       { testName: 'Serum Bilirubin Total ', result: '', units: 'mg/dl', bioRefInterval: '0.1-1.2' },
       { testName: 'Serum Bilirubin Direct', result: '', units: 'mg/dl', bioRefInterval: '00-0.3' },
       { testName: 'Bilirubin Indirect', result: '', units: 'mg/dl', bioRefInterval: 'upto 0.7' },
-      { testName: 'S.G.P.T (AST)', result: '', units: 'U/L', bioRefInterval: 'upto-<45' },
-      { testName: 'S.G.O.T(AST)', result: '', units: 'U/L ', bioRefInterval: 'upto-<45' },
+      { testName: 'S.G.P.T (AST)', result: '', units: 'U/L', bioRefInterval: 'upto <45' },
+      { testName: 'S.G.O.T(AST)', result: '', units: 'U/L ', bioRefInterval: 'upto <45' },
       { testName: 'Serum Alkaline Phosphatase', result: '', units: 'U/L ', bioRefInterval: 'Adults:41-135$Women:30-160' },
       { testName: 'Serum Protein-Total ', result: '', units: 'mg/dl', bioRefInterval: '6.0-8.3' },
       { testName: 'Serum Protein-albumin ', result: '', units: 'mg/dl', bioRefInterval: '3.2-5.0' },
@@ -108,12 +131,12 @@ export const setInitialTestDetail = (f) => {
   }
   else if (f.includes("hbsag")) {
     initialData = [
-      { testName: 'Hbsag$ Method:CARD Method', result: '', units: '', bioRefInterval: '' },
+      { testName: 'HBSAG$ Method:CARD Method', result: '', units: '', bioRefInterval: '' },
     ]
   }
   else if (f.includes("glycosylated haemoglobin") || f.includes('hba1c')) {
     initialData = [
-      { testName: ' Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized', result: '', units: '', bioRefInterval: '5.0%-6.5%-Normal Non$Diabetic Level$7.0-9.0-Good Control (GOAL)$9.0 to 10.0-Fair Control$>10-Poor Control' },
+      { testName: ' Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized', result: '', units: '', bioRefInterval: '5.0-6.5 Normal Non$Diabetic Level$7.0-9.0 Good Control (GOAL)$9.0 to 10.0 Fair Control$>10 Poor Control' },
       { testName: 'Mean Blood Glucose (calculated from HbA1c)', result: '', units: '', bioRefInterval: '' },
     ]
   }
@@ -142,12 +165,12 @@ export const setInitialTestDetail = (f) => {
   }
   else if (f.includes("fasting lipid profile") || f.includes('flp')) {
     initialData = [
-      { testName: 'Serum Total Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '130-250' },
-      { testName: 'Serum HDL Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '30-50' },
-      { testName: 'serum LDL Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '100-160' },
-      { testName: 'Serum VLDL Cholesterol', result: '', units: 'mg/dl', bioRefInterval: '5-40' },
-      { testName: 'Serum Triglycerides', result: '', units: 'mg/dl ', bioRefInterval: '50-200' },
-      { testName: 'Total Cholesterol/HDL Ratio', result: '', units: '', bioRefInterval: 'Men:3.8-5.9$Women:3.1-4.6' },
+      { testName: 'Serum Total Cholesterol$Method:Enzymatic', result: '', units: 'mg/dl', bioRefInterval: '130-250' },
+      { testName: 'Serum HDL Cholesterol$Method:Enzymatic', result: '', units: 'mg/dl', bioRefInterval: '30-50' },
+      { testName: 'Serum LDL Cholesterol$Method:Direct', result: '', units: 'mg/dl', bioRefInterval: '100-160' },
+      { testName: 'Serum VLDL Cholesterol$Method:Calculated', result: '', units: 'mg/dl', bioRefInterval: '5-40' },
+      { testName: 'Serum Triglycerides$Method:Enzymatic', result: '', units: 'mg/dl ', bioRefInterval: '50-200' },
+      { testName: 'Total Cholesterol/HDL Ratio$Method:Calculated', result: '', units: '', bioRefInterval: 'Men:3.8-5.9$Women:3.1-4.6' },
       { testName: 'LDL: HDL Ratio', result: '', units: '', bioRefInterval: 'Men-1.00;Average-3.55$Moderate-6.25;High-7.99' },
 
     ]
@@ -222,4 +245,12 @@ export const setInitialTestDetail = (f) => {
 
 
   return initialData;
+}
+
+export const isFontBold = (testName) => {
+  const changeCase = testName.toLowerCase();
+
+  const testNameToBold = ["haemoglobin(hb)","total wbc count","r.b.c. count","platelets count"];
+
+  return testNameToBold.includes(changeCase) ? true : false;
 }
