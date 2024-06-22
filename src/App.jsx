@@ -288,117 +288,115 @@ function App() {
     }
   }, [showPreview]);
 
-
   const parseBioRefInterval = (bioRefInterval) => {
     const intervals = {
-      male: [],
-      female: [],
-      men: [],
-      women: [],
-      general: [],
+        male: [],
+        female: [],
+        men: [],
+        women: [],
+        general: [],
     };
-  
+
     const parseRange = (range) => {
-      range = range.trim().toLowerCase();
-      let min = null;
-      let max = null;
-  
-      if (range.startsWith('upto <')) {
-        max = parseFloat(range.slice(6).trim());
-      } else if (range.startsWith('upto >')) {
-        min = parseFloat(range.slice(6).trim());
-      } else if (range.startsWith('upto')) {
-        max = parseFloat(range.slice(4).trim());
-      } else if (range.startsWith('<')) {
-        max = parseFloat(range.slice(1).trim());
-      } else if (range.startsWith('>')) {
-        min = parseFloat(range.slice(1).trim());
-      } else {
-        [min, max] = range.split('-').map(str => parseFloat(str.trim()));
-      }
-      return { min, max };
+        range = range.trim().toLowerCase();
+        let min = null;
+        let max = null;
+
+        if (range.startsWith('upto <')) {
+            max = parseFloat(range.slice(6).trim());
+        } else if (range.startsWith('upto >')) {
+            min = parseFloat(range.slice(6).trim());
+        } else if (range.startsWith('upto')) {
+            max = parseFloat(range.slice(4).trim());
+        } else if (range.startsWith('<')) {
+            max = parseFloat(range.slice(1).trim());
+        } else if (range.startsWith('>')) {
+            min = parseFloat(range.slice(1).trim());
+        } else {
+            [min, max] = range.split('-').map(str => parseFloat(str.trim()));
+        }
+        return { min, max };
     };
-  
-    const parts = bioRefInterval.split(/\s(?=[a-zA-Z]+:)/); // Split by spaces followed by gender labels
-    parts.forEach(part => {
-      const lowerPart = part.toLowerCase();
-      if (lowerPart.startsWith('male:')) {
-        intervals.male.push(parseRange(part.slice(5)));
-      } else if (lowerPart.startsWith('female:')) {
-        intervals.female.push(parseRange(part.slice(7)));
-      } else if (lowerPart.startsWith('men:')) {
-        intervals.men.push(parseRange(part.slice(4)));
-      } else if (lowerPart.startsWith('women:')) {
-        intervals.women.push(parseRange(part.slice(6)));
-      } else {
-        intervals.general.push(parseRange(part));
-      }
+
+    const parts = bioRefInterval.split(/(?<=\d)\s(?=[a-zA-Z])/); // Split at space between numeric and non-numeric segments
+    console.log("parts",parts)
+    parts[0].split('$').forEach(part => {
+        const lowerPart = part.toLowerCase();
+        if (lowerPart.startsWith('male:')) {
+            intervals.male.push(parseRange(part.slice(5)));
+        } else if (lowerPart.startsWith('female:')) {
+            intervals.female.push(parseRange(part.slice(7)));
+        } else if (lowerPart.startsWith('men:')) {
+            intervals.men.push(parseRange(part.slice(4)));
+        } else if (lowerPart.startsWith('women:')) {
+            intervals.women.push(parseRange(part.slice(6)));
+        } else {
+            intervals.general.push(parseRange(part));
+        }
     });
-  
+
     return intervals;
-  };
-  
-  const normalizeGender = (gender) => {
+};
+
+const normalizeGender = (gender) => {
     const lowerGender = gender.toLowerCase();
     if (lowerGender === 'm' || lowerGender === 'male') return 'male';
     if (lowerGender === 'f' || lowerGender === 'female') return 'female';
     return null;
-  };
-  
-  const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
+};
+
+const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
     if (bioRefInterval != null && bioRefInterval !== '') {
-      const normalizedGender = normalizeGender(gender);
-  
-      const intervals = parseBioRefInterval(bioRefInterval);
-      let ranges = [];
-  
-      if (normalizedGender === 'male') {
-        ranges = intervals.male.length ? intervals.male : intervals.men.length ? intervals.men : intervals.general;
-      } else if (normalizedGender === 'female') {
-        ranges = intervals.female.length ? intervals.female : intervals.women.length ? intervals.women : intervals.general;
-      } else {
-        ranges = intervals.general;
-      }
-  
-      for (const { min, max } of ranges) {
-        if ((min != null && result < min) || (max != null && result > max)) {
-          return true;
+        const normalizedGender = normalizeGender(gender);
+
+        const intervals = parseBioRefInterval(bioRefInterval);
+        let ranges = [];
+
+        if (normalizedGender === 'male') {
+            ranges = intervals.male.length ? intervals.male : intervals.men.length ? intervals.men : intervals.general;
+            console.log("intervals",intervals)
+            console.log("ranges",ranges)
+        } else if (normalizedGender === 'female') {
+            ranges = intervals.female.length ? intervals.female : intervals.women.length ? intervals.women : intervals.general;
+        } else {
+            ranges = intervals.general;
         }
-      }
+
+        for (const { min, max } of ranges) {
+            if ((min != null && result < min) || (max != null && result > max)) {
+                return true;
+            }
+        }
     }
     return false;
-  };
-  
-  // Assuming `initialData` is defined elsewhere in your code
-  const checkHbA1cResults = (initialData, gender) => {
-    let isHbA1cOutOfRange = false;
-  
+};
+
+// Assuming `initialData` is defined elsewhere in your code
+const checkResults = (initialData, gender) => {
+    let isAnyValueOutOfRange = false;
+
     initialData.forEach(item => {
-      if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized')) {
-        if (isValueOutOfRange(parseFloat(item.result), item.bioRefInterval, gender)) {
-          isHbA1cOutOfRange = true;
+        if (isValueOutOfRange(parseFloat(item.result.replace(/,/g, '')), item.bioRefInterval, gender)) {
+            isAnyValueOutOfRange = true;
         }
-      }
     });
-  
-    if (isHbA1cOutOfRange) {
-      console.log(isHbA1cOutOfRange)
-      initialData = initialData.map(item => {
-        if (item.testName.includes('Glycosylated Haemoglobin-HbA1c$Method: Latex Immunoturbidometry-NGSP/IFCC Standardized') || item.testName.includes('Mean Blood Glucose (calculated from HbA1c)')) {
-          console.log("### ",isHbA1cOutOfRange)
-          return {
-            ...item,
-            bold: true,
-            color: 'red'
-          };
-        }
-        return item;
-      });
+
+    if (isAnyValueOutOfRange) {
+        initialData = initialData.map(item => {
+            if (isValueOutOfRange(parseFloat(item.result.replace(/,/g, '')), item.bioRefInterval, gender)) {
+                return {
+                    ...item,
+                    bold: true,
+                    color: 'red'
+                };
+            }
+            return item;
+        });
     }
-  
+
     return initialData;
-  };
-   
+};
+  
   return (
     <>
       <div className="App p-8">
