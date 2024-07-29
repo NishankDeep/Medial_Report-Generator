@@ -203,7 +203,7 @@ function App() {
   const downloadReport = (index) => {
     const report = reports[index];
     setCurrentReport(report);
-    setShowPreview(true);
+    setShowPreview(true);          
 
     setTimeout(() => {
       const input = previewRef.current;
@@ -219,7 +219,7 @@ function App() {
 
           // Custom header
           const addHeader = (pdf, pageNumber) => {
-            pdf.addImage(MainLogo, 'JPEG', 10, 8, 25, 25); // Shifted down by 3 units
+            pdf.addImage(MainLogo, 'JPEG', 10, 8, 25, 25,undefined, 'SLOW'); // Shifted down by 3 units
             pdf.setFontSize(40);
             pdf.setFont('helvetica', 'bold');
             pdf.text('SPARSH LAB', 40, 18); // Shifted down by 3 units
@@ -227,7 +227,7 @@ function App() {
             pdf.text('Sahitya Samaj Chowk, Jail road', 40, 23); // Shifted down by 3 units
             pdf.text('Daltonganj, 822101', 40, 28); // Shifted down by 3 units
             pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 33); // Shifted down by 3 units
-            pdf.addImage(Microscope, 'PNG', 183.5, 13.5, 15, 15); // Shifted down by 3 units
+            pdf.addImage(Microscope, 'PNG', 183.5, 13.5, 15, 15,undefined, 'SLOW'); // Shifted down by 3 units
             pdf.text('Sparsh Clinic Daltonganj', 142, 28); // Shifted down by 3 units
             pdf.text('PHARMACY, LAB, CLINIC', 142, 33); // Shifted down by 3 units
             pdf.setLineWidth(1.5);
@@ -249,7 +249,7 @@ function App() {
           };
 
           addHeader(pdf, 1);
-          pdf.addImage(imgData, 'PNG', 0, 35, imgWidth, imgHeight);
+          pdf.addImage(imgData, 'PNG', 0, 35, imgWidth, imgHeight,undefined,"SLOW");
           heightLeft -= pageHeight;
 
           addFooter(pdf, 1);
@@ -259,7 +259,7 @@ function App() {
             position = heightLeft - imgHeight;
             pdf.addPage();
             addHeader(pdf, pageNumber);
-            pdf.addImage(imgData, 'PNG', 0, position + 35, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'PNG', 0, position + 35, imgWidth, imgHeight,undefined,"SLOW");
             heightLeft -= pageHeight;
             addFooter(pdf, pageNumber);
             pageNumber++;
@@ -271,6 +271,7 @@ function App() {
         });
       }
     }, 500);
+
   };
  
 
@@ -371,31 +372,7 @@ const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
     return false;
 };
 
-// Assuming `initialData` is defined elsewhere in your code
-const checkResults = (initialData, gender) => {
-    let isAnyValueOutOfRange = false;
 
-    initialData.forEach(item => {
-        if (isValueOutOfRange(parseFloat(item.result.replace(/,/g, '')), item.bioRefInterval, gender)) {
-            isAnyValueOutOfRange = true;
-        }
-    });
-
-    if (isAnyValueOutOfRange) {
-        initialData = initialData.map(item => {
-            if (isValueOutOfRange(parseFloat(item.result.replace(/,/g, '')), item.bioRefInterval, gender)) {
-                return {
-                    ...item,
-                    bold: true,
-                    color: 'red'
-                };
-            }
-            return item;
-        });
-    }
-
-    return initialData;
-};
   
   return (
     <>
