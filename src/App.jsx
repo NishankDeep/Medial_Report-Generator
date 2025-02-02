@@ -20,7 +20,7 @@ const initialData = {
   gender: 'M',
   Sample_Collected_On: todayDate(),
   Sample_Out_On: todayDate(),
-  referredBy: '',
+  referredBy: 'Dr.',
   mainTestName: '',
   salutation: '',
 }
@@ -142,30 +142,30 @@ function App() {
     
     if(formData.mainTestName.toLowerCase().includes("cbc")){
       // hct
-      if(newTestDetails[5]["result"]!= null && newTestDetails[7]["result"]!=null && (newTestDetails[5]["result"].length > 0 && newTestDetails[7]["result"].length > 0)){
+      if(newTestDetails[7]["result"]!= null && newTestDetails[9]["result"]!=null && (newTestDetails[7]["result"].length > 0 && newTestDetails[9]["result"].length > 0)){
         // 6 -( 5 * 7 )/10
-        let rbcCount = parseFloat(newTestDetails[5]["result"]);
-        let hct =  parseFloat(newTestDetails[7]["result"]);
+        let rbcCount = parseFloat(newTestDetails[7]["result"]);
+        let hct =  parseFloat(newTestDetails[9]["result"]);
         let ans = (rbcCount*hct)/10
-        newTestDetails[6]["result"] = (ans).toFixed(2);
+        newTestDetails[8]["result"] = (ans).toFixed(2);
       }
       
       // mch
-      if(newTestDetails[5]["result"]!= null && newTestDetails[0]["result"]!=null && (newTestDetails[0]["result"].length > 0 && newTestDetails[5]["result"].length>0)){
+      if(newTestDetails[7]["result"]!= null && newTestDetails[0]["result"]!=null && (newTestDetails[0]["result"].length > 0 && newTestDetails[9]["result"].length>0)){
         // 8 -( 0 * 10)/5
         let hb = parseFloat(newTestDetails[0]["result"]);
-        let rbcCount =  parseFloat(newTestDetails[5]["result"]);
+        let rbcCount =  parseFloat(newTestDetails[7]["result"]);
         let ans = (hb*10)/rbcCount
-        newTestDetails[8]["result"] = (ans).toFixed(1);
+        newTestDetails[10]["result"] = (ans).toFixed(1);
       }
 
       // mchc
-      if(newTestDetails[6]["result"]!= null && newTestDetails[0]["result"]!=null && (newTestDetails[0]["result"].length > 0 && newTestDetails[6]["result"].length>0)){
+      if(newTestDetails[8]["result"]!= null && newTestDetails[0]["result"]!=null && (newTestDetails[0]["result"].length > 0 && newTestDetails[8]["result"].length>0)){
         // 8 -( 0 * 10)/5
         let hb = parseFloat(newTestDetails[0]["result"]);
-        let hct =  parseFloat(newTestDetails[6]["result"]);
+        let hct =  parseFloat(newTestDetails[8]["result"]);
         let ans = (hb*100)/hct
-        newTestDetails[9]["result"] = (ans).toFixed(1);
+        newTestDetails[11]["result"] = (ans).toFixed(1);
       }
     }
     

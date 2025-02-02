@@ -81,8 +81,10 @@ export const setInitialTestDetail = (f) => {
     initialData = [{ testName: 'HAEMOGLOBIN(Hb)', result: '', units: 'mg/dl', bioRefInterval: 'Male:13.1-16.7$Female:12.0-15.0' },
     { testName: 'Total WBC Count', result: '', units: 'Cells/cu mm', bioRefInterval: '4,100-11,100' },
     { testName: 'Lymphocytes', result: '', units: '%', bioRefInterval: '16-46' },
-    { testName: 'Monocytes', result: '', units: '%', bioRefInterval: '2.3-8.5' },
-    { testName: 'Granulyocytes', result: '', units: '%', bioRefInterval: '48.7-81.2' },
+    { testName: 'Monocytes', result: '', units: '%', bioRefInterval: '02-08' },
+    { testName: 'Granulyocytes', result: '', units: '%', bioRefInterval: '48-81' },
+    { testName: 'Eosinophils', result: '', units: '%', bioRefInterval: '01-06' },
+    { testName: 'Basophil', result: '', units: '%', bioRefInterval: '00-01' },
     { testName: 'R.B.C. Count', result: '', units: 'Million Cells/cu mm ', bioRefInterval: 'Women:3.90-5.20$Men:4.5-5.5' },
     { testName: 'HCT', result: '', units: '% ', bioRefInterval: '36.4-46.0' },
     { testName: 'MCV', result: '', units: 'Fl ', bioRefInterval: '83-97' },
@@ -165,14 +167,13 @@ export const setInitialTestDetail = (f) => {
   }
   else if (f.includes("fasting lipid profile") || f.includes('flp')) {
     initialData = [
-      { testName: 'Serum Total Cholesterol$Method:Enzymatic', result: '', units: 'mg/dl', bioRefInterval: '130-250' },
+      { testName: 'Serum Total Cholesterol$Method:Enzymatic', result: '', units: 'mg/dl', bioRefInterval: '0-200' },
       { testName: 'Serum HDL Cholesterol$Method:Enzymatic', result: '', units: 'mg/dl', bioRefInterval: '30-50' },
       { testName: 'Serum LDL Cholesterol$Method:Direct', result: '', units: 'mg/dl', bioRefInterval: '100-160' },
       { testName: 'Serum VLDL Cholesterol$Method:Calculated', result: '', units: 'mg/dl', bioRefInterval: '5-40' },
-      { testName: 'Serum Triglycerides$Method:Enzymatic', result: '', units: 'mg/dl ', bioRefInterval: '50-200' },
+      { testName: 'Serum Triglycerides$Method:Enzymatic', result: '', units: 'mg/dl ', bioRefInterval: '35-170' },
       { testName: 'Total Cholesterol/HDL Ratio$Method:Calculated', result: '', units: '', bioRefInterval: 'Men:3.8-5.9$Women:3.1-4.6' },
       { testName: 'LDL: HDL Ratio', result: '', units: '', bioRefInterval: 'Men-1.00;Average-3.55$Moderate-6.25;High-7.99' },
-
     ]
   }
   else if (f.includes("prothombin time") || f.includes('pt/inr')) {

@@ -73,7 +73,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
 
     let lineHeight = "1rem";
     if(currentReport.mainTestName.toLowerCase().includes("cbc")){
-        lineHeight="0.8rem"
+        lineHeight="0.6rem"
     }
     
     return (
