@@ -103,7 +103,7 @@ const FormMainInfo = (prop) => {
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="block mb-1">Referred By:</label>
-                    <select
+                    {/* <select
                         name="referredBy"
                         value={formData.referredBy}
                         onChange={handleInputChange}
@@ -115,7 +115,15 @@ const FormMainInfo = (prop) => {
                         <option value="Dr.Tusar Arya">Dr.Tusar Arya</option>
                         <option value="Dr.Kumar Prateek">Dr.Kumar Prateek</option>
                         <option value="Dr.Self">Dr.Self</option>
-                    </select>
+                    </select> */}
+                    <input
+                        type="text"
+                        name="referredBy"
+                        value={formData.referredBy}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
                 </div>
                 <div>
                     <TestNameDropdown formData={formData} onTestNameChange={handleTestNameChange} />
