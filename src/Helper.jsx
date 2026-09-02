@@ -98,6 +98,23 @@ export const setInitialTestDetail = (f) => {
     { testName: 'PDW', result: '', units: '%', bioRefInterval: '11.0-18.0' },
     ]
   }
+  else if (f.includes("blood group")) {
+    initialData = [
+      { testName: 'BLOOD GROUP ABO & Rh FACTOR', result: '', units: '', bioRefInterval: '' },
+    ]
+  }
+  else if (f.includes("viral infection")) {
+    initialData = [
+      { testName: 'HIV 1 & 2 ANTIBODIES, SCREENING TEST', result: '', units: '', bioRefInterval: '' },
+      { testName: 'HEPATITIS C VIRUS (HCV) RAPID SCREENING TEST', result: '', units: '', bioRefInterval: '' },
+      { testName: 'HEPATITIS B SURFACE ANTIGEN (HBsAg) RAPID SCREENING TEST', result: '', units: '', bioRefInterval: '' },
+    ]
+  }
+  else if (f.includes("vdrl")) {
+    initialData = [
+      { testName: 'VDRL, SCREENING TEST', result: '', units: '', bioRefInterval: '' },
+    ]
+  }
   else if (f.includes("kidney function test") || f.includes("kft")) {
     initialData = [{ testName: 'Serum Creatinine', result: '', units: 'mg/dl', bioRefInterval: 'Men:0.6-1.4$Women:0.6-1.2' },
     { testName: 'Blood Urea', result: '', units: 'mg/dl', bioRefInterval: '13-45' },
@@ -122,13 +139,12 @@ export const setInitialTestDetail = (f) => {
   }
   else if (f.includes("anti hcv") || f.includes("hcv")) {
     initialData = [
-      { testName: 'Anti HCV', result: '', bioRefInterval: '' }
+      { testName: 'HEPATITIS C VIRUS (HCV) RAPID SCREENING TEST', result: '', units: '', bioRefInterval: '' }
     ]
   }
   else if (f.includes("hiv")) {
     initialData = [
-      { testName: 'HIV 1', result: '', bioRefInterval: '' },
-      { testName: 'HIV 2', result: '', bioRefInterval: '' }
+      { testName: 'HIV I & II', result: '', units: '', bioRefInterval: '' }
     ]
   }
   else if (f.includes("hbsag")) {
@@ -148,16 +164,15 @@ export const setInitialTestDetail = (f) => {
     ]
 
   }
-  else if (f.includes("fbs")) {
-    initialData = [
-      { testName: ' Fasting Blood Sugar-RBS$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-110' },
-    ]
-  }
   else if (f.includes("fbs+pp")) {
     initialData = [
       { testName: ' Fasting Blood Sugar-RBS$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-110' },
       { testName: ' Post Prandial-PP$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-140' },
-
+    ]
+  }
+  else if (f.includes("fbs")) {
+    initialData = [
+      { testName: ' Fasting Blood Sugar-RBS$ Method:GOD/POD Method', result: '', units: 'mg/dl', bioRefInterval: '70-110' },
     ]
   }
   else if (f.includes("pp")) {
@@ -228,10 +243,9 @@ export const setInitialTestDetail = (f) => {
       { testName: 'Trop-T Test', result: '', units: '', bioRefInterval: '' },
     ]
   }
-  else if (f.includes("c-reactive protein")) {
+  else if (f.includes("c-reactive protein") || f.includes("c.r.p") || f.includes("crp")) {
     initialData = [
-      { testName: 'C-Reactive Protein', result: '', units: 'mg/dl', bioRefInterval: '0-5' },
-      { testName: 'The Test Result', result: '', units: '', bioRefInterval: '' }
+      { testName: 'C-REACTIVE PROTEIN (CRP)', result: '', units: 'mg/dl', bioRefInterval: '0-6' },
     ]
   }
   else if (f.includes("malaria parasite")) {
@@ -254,4 +268,43 @@ export const isFontBold = (testName) => {
   const testNameToBold = ["haemoglobin(hb)","total wbc count","r.b.c. count","platelets count"];
 
   return testNameToBold.includes(changeCase) ? true : false;
+}
+// (H)/(L) markers are shown only on the CBC panel, and only for these four tests
+export const showRangeFlag = (mainTestName, testName) => {
+  if (mainTestName == null || testName == null) return false;
+
+  const panel = mainTestName.toLowerCase();
+  if (!panel.includes("complete blood count") && !panel.includes("cbc")) return false;
+
+  const flaggedTests = ["haemoglobin(hb)", "total wbc count", "r.b.c. count", "platelets count"];
+
+  return flaggedTests.includes(testName.toLowerCase().trim());
+}
+
+// the HB% report shows how far the result is from its range, as a percentage
+// instead of an (H)/(L) marker
+export const showDeficiencyPercent = (mainTestName, testName) => {
+  if (mainTestName == null || testName == null) return false;
+
+  const panel = mainTestName.toLowerCase().trim();
+  if (!panel.startsWith("hb%") && panel !== "hb") return false;
+
+  return testName.toLowerCase().replace(/\s/g, "") === "haemoglobin(hb)";
+}
+
+// a positive result is printed in bold wherever it appears
+export const isPositiveResult = (result) => {
+  if (result == null) return false;
+
+  return result.toString().toLowerCase().includes("positive");
+}
+
+// picking a salutation sets the gender to match
+export const genderForSalutation = (salutation) => {
+  const value = (salutation || "").toLowerCase().trim();
+
+  if (value === "mr." || value === "master") return "M";
+  if (value === "mrs." || value === "miss") return "F";
+
+  return "";
 }

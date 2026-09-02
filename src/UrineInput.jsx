@@ -89,11 +89,10 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
 
     return (
         <>
-            <div id="testDetailsContainer" className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Test Details</h3>
-                {urineTestDetails.test1.length > 0 && <h4 className="text-lg font-semibold mb-2">PHYSICAL EXAMINATION </h4>}
+            <div id="testDetailsContainer">
+                                {urineTestDetails.test1.length > 0 && <h4 className="card-title" style={{ marginTop: '1rem' }}>PHYSICAL EXAMINATION </h4>}
                 {urineTestDetails.test1.map((test, index) => (
-                    <div key={index} className="grid grid-cols-5 gap-4 mb-2">
+                    <div key={index} className="test-row">
                         <input
                             type="text"
                             name="testName"
@@ -101,7 +100,6 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                             onChange={(e) => handleTest1DetailChange(index, e)}
                             placeholder="Test Name"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
@@ -110,12 +108,11 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                             onChange={(e) => handleTest1DetailChange(index, e)}
                             placeholder="Result"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <button
                             type="button"
                             onClick={() => handleRemoveTest1Detail(index)}
-                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            className="btn btn-danger btn-icon"
                         >
                             Remove
                         </button>
@@ -124,13 +121,13 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                 <button
                     type="button"
                     onClick={handleAddTest1Detail}
-                    className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    className="btn btn-secondary"
                 >
                     Add Test Detail1
                 </button>
-                {urineTestDetails.test2.length > 0 && <h4 className="text-lg font-semibold mb-2">CHEMICAL EXAMINATION </h4>}
+                {urineTestDetails.test2.length > 0 && <h4 className="card-title" style={{ marginTop: '1rem' }}>CHEMICAL EXAMINATION </h4>}
                 {urineTestDetails.test2.map((test, index) => (
-                    <div key={index} className="grid grid-cols-5 gap-4 mb-2">
+                    <div key={index} className="test-row">
                         <input
                             type="text"
                             name="testName"
@@ -138,7 +135,6 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                             onChange={(e) => handleTest2DetailChange(index, e)}
                             placeholder="Test Name"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
@@ -147,12 +143,11 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                             onChange={(e) => handleTest2DetailChange(index, e)}
                             placeholder="Result"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <button
                             type="button"
                             onClick={() => handleRemoveTest2Detail(index)}
-                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            className="btn btn-danger btn-icon"
                         >
                             Remove
                         </button>
@@ -161,13 +156,13 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                 <button
                     type="button"
                     onClick={handleAddTest2Detail}
-                    className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    className="btn btn-secondary"
                 >
                     Add Test Detail2
                 </button>
-                {urineTestDetails.test3.length > 0 && <h4 className="text-lg font-semibold mb-2">MICROSCOPIC EXAMINATION </h4>}
+                {urineTestDetails.test3.length > 0 && <h4 className="card-title" style={{ marginTop: '1rem' }}>MICROSCOPIC EXAMINATION </h4>}
                 {urineTestDetails.test3.map((test, index) => (
-                    <div key={index} className="grid grid-cols-5 gap-4 mb-2">
+                    <div key={index} className="test-row">
                         <input
                             type="text"
                             name="testName"
@@ -175,7 +170,6 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                             onChange={(e) => handleTest3DetailChange(index, e)}
                             placeholder="Test Name"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
@@ -184,12 +178,11 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                             onChange={(e) => handleTest3DetailChange(index, e)}
                             placeholder="Result"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <button
                             type="button"
                             onClick={() => handleRemoveTest3Detail(index)}
-                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            className="btn btn-danger btn-icon"
                         >
                             Remove
                         </button>
@@ -198,14 +191,14 @@ export const UrineInput = ({ urineTestDetails, setUrineTestDetails, formData }) 
                 <button
                     type="button"
                     onClick={handleAddTest3Detail}
-                    className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    className="btn btn-secondary"
                 >
                     Add Test Detail3
                 </button>
             </div>
             <button
                 type="submit"
-                className="px-4 py-2 bg-green-500 text-white rounded"
+                className="btn btn-primary"
             >
                 Submit
             </button>

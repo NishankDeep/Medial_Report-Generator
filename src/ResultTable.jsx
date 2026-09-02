@@ -1,9 +1,8 @@
 import React from "react";
 import './App.css';
 
-import ManishSign from './ManishSign.jpg';
 import DoctorSign from './DoctorSign.PNG';
-import { formatCellContent,isFontBold,formatCellContentBioRef } from "./Helper";
+import { formatCellContent,isFontBold,formatCellContentBioRef,showRangeFlag,showDeficiencyPercent,isPositiveResult } from "./Helper";
 import { UrineOputut } from "./UrineInput";
 import { OptimalTestOputut } from "./OptimalTest";
 
@@ -52,7 +51,7 @@ export const WidalTestBody = ({ data }) => {
     );
 }
 
-export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
+export const ResultTableContent = ({ currentReport, isValueOutOfRange, getRangeStatus, getRangeDeviation }) => {
     // const [ishab1ac,setishb1ac] = useState(false);
     const isThyroidTest = currentReport.mainTestName.toLowerCase().includes("widal test (slide method)");
     const isUrineTest = currentReport.mainTestName.toLowerCase().includes("urine");
@@ -70,6 +69,23 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
             }
         }
     });
+
+    // (H) above bio ref range, (L) below it
+    const rangeFlag = (test) => {
+        if (typeof getRangeStatus !== 'function') return '';
+        if (!showRangeFlag(currentReport.mainTestName, test.testName)) return '';
+        const status = getRangeStatus(test.result, test.bioRefInterval, currentReport.gender, currentReport.age);
+        return status ? ` (${status})` : '';
+    };
+
+    // HB% report: distance from the range as a percentage, not an (H)/(L) marker
+    const deviationLabel = (test) => {
+        if (typeof getRangeDeviation !== 'function') return '';
+        if (!showDeficiencyPercent(currentReport.mainTestName, test.testName)) return '';
+        const { status, percent } = getRangeDeviation(test.result, test.bioRefInterval, currentReport.gender, currentReport.age);
+        if (!status || percent == null) return '';
+        return <div style={{ marginTop: '0.35rem' }}>({percent.toFixed(1)}%)</div>;
+    };
 
     let lineHeight = "1rem";
     if(currentReport.mainTestName.toLowerCase().includes("cbc")){
@@ -116,8 +132,8 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                             {currentReport.tests.map((test, index) => (
                                 <tr key={index} style={{ lineHeight: `${lineHeight}` }}>
                                     <td className={`border border-gray-300 p-2 ${isFontBold(test.testName) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px'}}>{formatCellContent(test.testName)}</td>
-                                    <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age) || ishab1ac ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
-                                        {test.result}
+                                    <td className={`border border-gray-300 p-2 ${isValueOutOfRange(test.result, test.bioRefInterval, currentReport.gender, currentReport.age) || ishab1ac || isPositiveResult(test.result) ? 'font-bold' : ''}`} style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>
+                                        {test.result}{rangeFlag(test)}{deviationLabel(test)}
                                     </td>
                                     <td className="border border-gray-300 p-2 font-bold" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{test.units}</td>
                                     <td className="border border-gray-300 p-2" style={{ border: 'none', whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px' }}>{formatCellContentBioRef(test.bioRefInterval)}</td>
@@ -127,15 +143,15 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange }) => {
                 </table>}
             </div>
             <h4 className='endLine'>-----End Of Report----</h4>
-            <div className="flex justify-end mt-2 space-x-40" style={{ marginRight: '4rem' }}>
+            <div className="flex justify-between mt-2" style={{ marginLeft: '4rem', marginRight: '4rem' }}>
                 <div className="flex flex-col items-center" style={{ lineHeight: '0rem' }}>
-                    <img src={ManishSign} alt="Lab Technician" className="w-27 h-10" />
-                    <p className="font-bold" style={{ fontSize: '0.7rem' }}>Lab Technician</p>
+                    <div className="w-27 h-10" />
+                    <p className="font-bold" style={{ fontSize: '0.7rem' }}>LAB TECHNICIAN</p>
                 </div>
                 <div className="flex flex-col items-center h-40" style={{ lineHeight: '1rem' }}>
-                    <img src={DoctorSign} alt="Dr. Aubhuti Choudhary" className="w-28 h-10 z-50" />
-                    <p className="font-bold" style={{ fontSize: '0.7rem' }}>DR. Aubhuti Choudhary</p>
-                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '0.2rem' }}>M.D Pathology</p>
+                    <img src={DoctorSign} alt="DR. AUBHUTI CHOUDHARY" className="w-28 h-10 z-50" />
+                    <p className="font-bold" style={{ fontSize: '0.7rem' }}>DR. AUBHUTI CHOUDHARY</p>
+                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '0.2rem' }}>M.D PATHOLOGY</p>
                 </div>
             </div>
         </div>

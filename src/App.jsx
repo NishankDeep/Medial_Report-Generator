@@ -9,7 +9,7 @@ import FormMainInfo from './FormMainInfo.jsx';
 import TestDetailInput from './TestDetailInput.jsx';
 import DisplayPatientData from './DisplayPatientData.jsx';
 import { ResultTableContent } from './ResultTable.jsx';
-import { todayDate, setInitialTestDetail } from './Helper.jsx';
+import { todayDate, setInitialTestDetail, genderForSalutation } from './Helper.jsx';
 import { UrineInput } from './UrineInput.jsx';
 import { OptimalTestInput } from './OptimalTest.jsx';
 
@@ -71,9 +71,18 @@ function App() {
   const handleInputChange = (e) => {
     if (e.target != null && e.target.name != null) {
       const { name, value } = e.target;
-      setFormData({
-        ...formData,
-        [name]: value,
+      setFormData(prevFormData => {
+        const nextFormData = { ...prevFormData, [name]: value };
+
+        // Mr./Master mean male, Mrs./Miss mean female - still editable afterwards
+        if (name === 'salutation') {
+          const gender = genderForSalutation(value);
+          if (gender) {
+            nextFormData.gender = gender;
+          }
+        }
+
+        return nextFormData;
       });
     }
   };
@@ -224,8 +233,8 @@ function App() {
             pdf.setFont('helvetica', 'bold');
             pdf.text('SPARSH LAB', 40, 18); // Shifted down by 3 units
             pdf.setFontSize(10);
-            pdf.text('Sahitya Samaj Chowk, Jail road', 40, 23); // Shifted down by 3 units
-            pdf.text('Daltonganj, 822101', 40, 28); // Shifted down by 3 units
+            pdf.text('Majore More Road', 40, 23); // Shifted down by 3 units
+            pdf.text('Hamidganj, 822101', 40, 28); // Shifted down by 3 units
             pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 33); // Shifted down by 3 units
             pdf.addImage(Microscope, 'PNG', 183.5, 13.5, 15, 15,undefined, 'SLOW'); // Shifted down by 3 units
             pdf.text('Sparsh Clinic Daltonganj', 142, 28); // Shifted down by 3 units
@@ -239,7 +248,7 @@ function App() {
           const addFooter = (pdf, pageNumber) => {
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
-            pdf.text('SAHITYA SAMAJ CHOWK, Dr. ARUN SHUKLA ROAD, DALTONGANJ', 105, pageHeight - 15, { align: 'center' });
+            pdf.text('MAJORE MORE ROAD, HAMIDGANJ', 105, pageHeight - 15, { align: 'center' });
             pdf.text('PHONE NO - 9470944040, 9470944422', 105, pageHeight - 10, { align: 'center' });
             pdf.setTextColor(255, 0, 0);
             pdf.text('WISHING YOU A GOOD LIFE AND BE HEALTHY', 105, pageHeight - 5, { align: 'center' });
@@ -299,7 +308,8 @@ function App() {
     };
 
     const parseRange = (range) => {
-        range = range.trim().toLowerCase();
+        // strip thousands separators, e.g. '4,100-11,100'
+        range = range.trim().toLowerCase().replace(/,/g, '');
         let min = null;
         let max = null;
 
@@ -320,7 +330,6 @@ function App() {
     };
 
     const parts = bioRefInterval.split(/(?<=\d)\s(?=[a-zA-Z])/); // Split at space between numeric and non-numeric segments
-    console.log("parts",parts)
     parts[0].split('$').forEach(part => {
         const lowerPart = part.toLowerCase();
         if (lowerPart.startsWith('male:')) {
@@ -346,78 +355,133 @@ const normalizeGender = (gender) => {
     return null;
 };
 
-const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
-    if (bioRefInterval != null && bioRefInterval !== '') {
-        const normalizedGender = normalizeGender(gender);
+// how far a result sits outside its bio ref range.
+// status: 'H' above, 'L' below, '' inside. percent is measured against the
+// bound that was crossed, i.e. 16.7 is 100% so a result of 17 is 1.8% over.
+const getRangeDeviation = (result, bioRefInterval, gender, age) => {
+    const inRange = { status: '', percent: null };
+    if (bioRefInterval == null || bioRefInterval === '') return inRange;
 
-        const intervals = parseBioRefInterval(bioRefInterval);
-        let ranges = [];
+    const value = parseFloat(String(result).replace(/,/g, ''));
+    if (isNaN(value)) return inRange;
 
-        if (normalizedGender === 'male') {
-            ranges = intervals.male.length ? intervals.male : intervals.men.length ? intervals.men : intervals.general;
-            console.log("intervals",intervals)
-            console.log("ranges",ranges)
-        } else if (normalizedGender === 'female') {
-            ranges = intervals.female.length ? intervals.female : intervals.women.length ? intervals.women : intervals.general;
-        } else {
-            ranges = intervals.general;
+    const normalizedGender = normalizeGender(gender);
+    const intervals = parseBioRefInterval(bioRefInterval);
+    let ranges = [];
+
+    if (normalizedGender === 'male') {
+        ranges = intervals.male.length ? intervals.male : intervals.men.length ? intervals.men : intervals.general;
+    } else if (normalizedGender === 'female') {
+        ranges = intervals.female.length ? intervals.female : intervals.women.length ? intervals.women : intervals.general;
+    } else {
+        ranges = intervals.general;
+    }
+
+    for (const { min, max } of ranges) {
+        if (min != null && !isNaN(min) && value < min) {
+            return { status: 'L', percent: min === 0 ? null : ((min - value) / min) * 100 };
         }
-
-        for (const { min, max } of ranges) {
-            if ((min != null && result < min) || (max != null && result > max)) {
-                return true;
-            }
+        if (max != null && !isNaN(max) && value > max) {
+            return { status: 'H', percent: max === 0 ? null : ((value - max) / max) * 100 };
         }
     }
-    return false;
+    return inRange;
+};
+
+const getRangeStatus = (result, bioRefInterval, gender, age) => {
+    return getRangeDeviation(result, bioRefInterval, gender, age).status;
+};
+
+const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
+    return getRangeStatus(result, bioRefInterval, gender, age) !== '';
 };
 
 
   
   return (
-    <>
-      <div className="App p-8">
-        <h1 className="text-2xl font-bold mb-4">Medical Report Form</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <FormMainInfo formData={formData} handleInputChange={handleInputChange} handleTestNameChange={handleTestNameChange} />
+    <div className="App app-shell">
+      <header className="app-topbar">
+        <div className="app-topbar-inner">
+          <div className="app-brand">
+            <img src={MainLogo} alt="Sparsh Lab" className="app-brand-logo" />
+            <div>
+              <div className="app-brand-name">Sparsh Lab</div>
+              <div className="app-brand-sub">Medical Report Generator</div>
+            </div>
+          </div>
+          <div className="app-topbar-meta">
+            {reports.length} {reports.length === 1 ? 'report' : 'reports'} ready
+          </div>
+        </div>
+      </header>
+
+      <main className="app-main">
+        <form onSubmit={handleSubmit} className="stack">
+          <section className="card">
+            <h2 className="card-title">Patient &amp; Test</h2>
+            <FormMainInfo formData={formData} handleInputChange={handleInputChange} handleTestNameChange={handleTestNameChange} />
+          </section>
+
           {formData.mainTestName.toLowerCase().includes('urine') &&
-            <UrineInput urineTestDetails={urineTestDetails} setUrineTestDetails={setUrineTestDetails} formData={formData} />
+            <section className="card">
+              <h2 className="card-title">Urine Examination</h2>
+              <UrineInput urineTestDetails={urineTestDetails} setUrineTestDetails={setUrineTestDetails} formData={formData} />
+            </section>
           }
 
           {formData.mainTestName.toLowerCase().includes('optimal test') &&
-            <OptimalTestInput optimalTestDetails={optimalTestDetails} setOptimalTestDetails={setOptimalTestDetails} formData={formData} />
+            <section className="card">
+              <h2 className="card-title">Optimal Test</h2>
+              <OptimalTestInput optimalTestDetails={optimalTestDetails} setOptimalTestDetails={setOptimalTestDetails} formData={formData} />
+            </section>
           }
 
           {!formData.mainTestName.toLowerCase().includes('urine') && !formData.mainTestName.toLowerCase().includes('optimal test') && <>
+            <section className="card">
+              <div className="card-title-row">
+                <h2 className="card-title">Test Details</h2>
+                <button
+                  type="button"
+                  onClick={handleAddTestDetail}
+                  className="btn btn-secondary"
+                >
+                  + Add Row
+                </button>
+              </div>
 
-            <TestDetailInput
-              testDetails={testDetails}
-              formData={formData}
-              handleTestDetailChange={handleTestDetailChange}
-              handleRemoveTestDetail={handleRemoveTestDetail}
-            />
-            <button
-              type="button"
-              onClick={handleAddTestDetail}
-              className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Add Test Detail
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded"
-            >
-              Submit
-            </button>
+              <TestDetailInput
+                testDetails={testDetails}
+                formData={formData}
+                handleTestDetailChange={handleTestDetailChange}
+                handleRemoveTestDetail={handleRemoveTestDetail}
+              />
+            </section>
+
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary">
+                Save Report
+              </button>
+            </div>
           </>}
 
         </form>
 
-        <DisplayPatientData reports={reports} previewReport={previewReport} downloadReport={downloadReport} deleteReport={deleteReport} isValueOutOfRange={isValueOutOfRange} />
+        <DisplayPatientData reports={reports} previewReport={previewReport} downloadReport={downloadReport} deleteReport={deleteReport} isValueOutOfRange={isValueOutOfRange} getRangeStatus={getRangeStatus} getRangeDeviation={getRangeDeviation} />
+      </main>
 
-        {showPreview && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 mb-8" >
-            <div ref={modalRef} className="bg-white p-8 rounded-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+      {showPreview && (
+        <div className="modal-backdrop">
+          <div ref={modalRef} className="modal-panel">
+            <div className="modal-head">
+              <span>Report Preview</span>
+              <button
+                onClick={() => setShowPreview(false)}
+                className="btn btn-secondary"
+              >
+                Close
+              </button>
+            </div>
+            <div className="modal-body">
               <div ref={previewRef} className="preview-content">
                 {currentReport && (
                   <>
@@ -426,23 +490,16 @@ const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
                     <div className='transparent-bg' style={{ paddingBottom: '25%' }}>
                       <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0', paddingTop:'1rem' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
                   {/* Result Table */}
-                      <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} />
+                      <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} getRangeStatus={getRangeStatus} getRangeDeviation={getRangeDeviation} />
                     </div>
                   </>
                 )}
               </div>
-              <button
-                onClick={() => setShowPreview(false)}
-                className="bg-red-500 text-white p-2 rounded mt-4"
-              >
-                Close Preview
-              </button>
             </div>
           </div>
-        )}
-
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 }
 

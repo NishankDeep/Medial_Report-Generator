@@ -1,6 +1,5 @@
 import React from "react";
 import './App.css'
-import UrineInput from "./UrineInput";
 
 const displayInputContent = (test, formData, index, handleTestDetailChange) => {
     let displayOnScreenForInput;
@@ -13,7 +12,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     name={test.testName.includes("The Test is : ") === true ? "result" : "test1"}
                     value={test.testName.includes("The Test is : ") === true ? test.result : test.test1}
                     onChange={(e) => handleTestDetailChange(index, e)}
-                    className="p-2 border border-gray-300 rounded"
                     placeholder={test.testName.includes("The Test is : ") === true ? "Result" : "Test 1"}
                 />
 
@@ -22,7 +20,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     name="test2"
                     value={test.test2}
                     onChange={(e) => handleTestDetailChange(index, e)}
-                    className="p-2 border border-gray-300 rounded"
                     placeholder='Test 2'
                     style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                 />
@@ -32,7 +29,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     name="test3"
                     value={test.test3}
                     onChange={(e) => handleTestDetailChange(index, e)}
-                    className="p-2 border border-gray-300 rounded"
                     placeholder='Test 3'
                     style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                 />
@@ -42,7 +38,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     name="test4"
                     value={test.test4}
                     onChange={(e) => handleTestDetailChange(index, e)}
-                    className="p-2 border border-gray-300 rounded"
                     placeholder='Test 4'
                     style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                 />
@@ -52,7 +47,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     name="test5"
                     value={test.test5}
                     onChange={(e) => handleTestDetailChange(index, e)}
-                    className="p-2 border border-gray-300 rounded"
                     placeholder='Test 5'
                     style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                 />
@@ -69,7 +63,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     onChange={(e) => handleTestDetailChange(index, e)}
                     placeholder="Result"
                     required
-                    className="p-2 border border-gray-300 rounded"
                 />
             </>)
 
@@ -83,7 +76,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     onChange={(e) => handleTestDetailChange(index, e)}
                     placeholder="Result"
                     required
-                    className="p-2 border border-gray-300 rounded"
                 />
                 <input
                     type="text"
@@ -91,8 +83,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     value={test.units}
                     onChange={(e) => handleTestDetailChange(index, e)}
                     placeholder="Units"
-
-                    className="p-2 border border-gray-300 rounded"
                 />
                 <input
                     type="text"
@@ -100,8 +90,6 @@ const displayInputContent = (test, formData, index, handleTestDetailChange) => {
                     value={test.bioRefInterval}
                     onChange={(e) => handleTestDetailChange(index, e)}
                     placeholder="Bio Ref Interval"
-
-                    className="p-2 border border-gray-300 rounded"
                 />
             </>
         );
@@ -115,25 +103,27 @@ const TestDetailInput = (prop) => {
 
 
     const testReturnInput = <>
-        <div id="testDetailsContainer" className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">Test Details</h3>
+        <div id="testDetailsContainer">
+            {testDetails.length === 0 &&
+                <p className="selected-test">No rows yet. Pick a test above, or use "Add Row".</p>
+            }
             {testDetails.map((test, index) => (
-                <div key={index} className="grid grid-cols-5 gap-4 mb-2">
+                <div key={index} className="test-row">
 
                     <input
                         type="text"
                         name="testName"
                         value={test.testName}
                         onChange={(e) => handleTestDetailChange(index, e)}
-                        placeholder="Test Name"
+                    placeholder="Test Name"
                         required
-                        className="p-2 border border-gray-300 rounded"
-                    />
+                />
                     {displayInputContent(test, formData, index, handleTestDetailChange)}
                     <button
                         type="button"
                         onClick={() => handleRemoveTestDetail(index)}
-                        className="px-4 py-2 bg-red-500 text-white rounded"
+                        className="btn btn-danger btn-icon"
+                        title="Remove row"
                     >
                         Remove
                     </button>

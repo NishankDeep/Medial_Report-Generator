@@ -60,11 +60,10 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
 
     return (
         <>
-            <div id="testDetailsContainer" className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Test Details</h3>
-                {optimalTestDetails.test1.length > 0 && <h4 className="text-lg font-semibold mb-2">WIDAL TEST (SLIDE METHOD)</h4>}
+            <div id="testDetailsContainer">
+                                {optimalTestDetails.test1.length > 0 && <h4 className="card-title" style={{ marginTop: '1rem' }}>WIDAL TEST (SLIDE METHOD)</h4>}
                 {optimalTestDetails.test1.map((test, index) => (
-                    <div key={index} className="grid grid-cols-5 gap-4 mb-2">
+                    <div key={index} className="test-row">
                         <input
                             type="text"
                             name="testName"
@@ -72,14 +71,13 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             onChange={(e) => handleTest1DetailChange(index, e)}
                             placeholder="Test Name"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
                             name={test.testName.includes("The Test is : ") === true ? "result" : "test1"}
                             value={test.testName.includes("The Test is : ") === true ? test.result : test.test1}
                             onChange={(e) => handleTest1DetailChange(index, e)}
-                            className="p-2 border border-gray-300 rounded"
+                            
                             placeholder={test.testName.includes("The Test is : ") === true ? "Result" : "Test 1"}
                         />
 
@@ -88,7 +86,7 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             name="test2"
                             value={test.test2}
                             onChange={(e) => handleTest1DetailChange(index, e)}
-                            className="p-2 border border-gray-300 rounded"
+                            
                             placeholder='Test 2'
                             style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                         />
@@ -98,7 +96,7 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             name="test3"
                             value={test.test3}
                             onChange={(e) => handleTest1DetailChange(index, e)}
-                            className="p-2 border border-gray-300 rounded"
+                            
                             placeholder='Test 3'
                             style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                         />
@@ -108,7 +106,7 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             name="test4"
                             value={test.test4}
                             onChange={(e) => handleTest1DetailChange(index, e)}
-                            className="p-2 border border-gray-300 rounded"
+                            
                             placeholder='Test 4'
                             style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                         />
@@ -118,14 +116,14 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             name="test5"
                             value={test.test5}
                             onChange={(e) => handleTest1DetailChange(index, e)}
-                            className="p-2 border border-gray-300 rounded"
+                            
                             placeholder='Test 5'
                             style={{ display: test.testName.includes("The Test is : ") !== true ? 'block' : 'none' }}
                         />
                         <button
                             type="button"
                             onClick={() => handleRemoveTest1Detail(index)}
-                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            className="btn btn-danger btn-icon"
                         >
                             Remove
                         </button>
@@ -134,13 +132,13 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                 <button
                     type="button"
                     onClick={handleAddTest1Detail}
-                    className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    className="btn btn-secondary"
                 >
                     Add Test Detail1
                 </button>
-                {optimalTestDetails.test2.length > 0 && <h4 className="text-lg font-semibold mb-2"><p>Malaria Parasite</p><p>(Rapid screening test)</p> </h4>}
+                {optimalTestDetails.test2.length > 0 && <h4 className="card-title" style={{ marginTop: '1rem' }}><p>Malaria Parasite</p><p>(Rapid screening test)</p> </h4>}
                 {optimalTestDetails.test2.map((test, index) => (
-                    <div key={index} className="grid grid-cols-5 gap-4 mb-2">
+                    <div key={index} className="test-row">
                         <input
                             type="text"
                             name="testName"
@@ -148,7 +146,6 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             onChange={(e) => handleTest2DetailChange(index, e)}
                             placeholder="Test Name"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
@@ -157,12 +154,11 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                             onChange={(e) => handleTest2DetailChange(index, e)}
                             placeholder="Result"
                             required
-                            className="p-2 border border-gray-300 rounded"
                         />
                         <button
                             type="button"
                             onClick={() => handleRemoveTest2Detail(index)}
-                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            className="btn btn-danger btn-icon"
                         >
                             Remove
                         </button>
@@ -171,14 +167,14 @@ export const OptimalTestInput = ({ optimalTestDetails, setOptimalTestDetails, fo
                 <button
                     type="button"
                     onClick={handleAddTest2Detail}
-                    className="mb-2 mr-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    className="btn btn-secondary"
                 >
                     Add Test Detail2
                 </button>
             </div>
             <button
                 type="submit"
-                className="px-4 py-2 bg-green-500 text-white rounded"
+                className="btn btn-primary"
             >
                 Submit
             </button>

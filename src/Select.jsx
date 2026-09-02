@@ -6,8 +6,8 @@ const options = [
   { value: 'COMPLETE BLOOD COUNT - CBC', label: 'Complete Blood Count - CBC' },
   { value: 'KIDNEY FUNCTION TEST - KFT', label: 'Kidney Function Test - KFT' },
   { value: 'LIVER FUNCTION TESTS - LFT', label: 'Liver Function Tests - LFT' },
-  { value: 'Ant HCV', label: 'Anti HCV' },
-  { value: 'HIV 1 & 2 Rapid', label: 'Hiv 1 & 2 rapid' },
+  { value: 'HCV', label: 'HCV' },
+  { value: 'HIV I & II', label: 'HIV I & II' },
   { value: 'HBSAG', label: 'HBSAG' },
   { value: 'Glycosylated Haemoglobin - HbA1c', label: 'Glycosylated Haemoglobin - HbA1c' },
   { value: 'RBS', label: 'RBS' },
@@ -21,31 +21,50 @@ const options = [
   { value: 'REPORT ON THE EXAMINATION OF URINE', label: 'Urine' },
   { value: 'E.S.R', label: 'E.S.R' },
   { value: 'TROP-T TEST', label: 'TROP-T TEST' },
-  { value: 'C-REACTIVE PROTEIN', label: 'C-REACTIVE PROTEIN' },
+  { value: 'C.R.P', label: 'C.R.P' },
   { value: 'Malaria Parasite', label: 'Malaria Parasite' },
+  { value: 'BLOOD GROUP ABO & Rh FACTOR', label: 'Blood Group ABO & Rh Factor' },
+  { value: 'VIRAL INFECTION', label: 'Viral Infection' },
+  { value: 'VDRL INFECTION', label: 'VDRL Infection' },
   { value: 'OPTIMAL TEST', label: 'Optimal Test' },
   // Add more options as needed
 ];
 
 const customStyles = {
-  control: (provided) => ({
+  control: (provided, state) => ({
     ...provided,
-    minHeight: '30px',  // Adjust this value to set the desired height
-    height: '35px',
-    margin: '0px'
+    minHeight: '38px',
+    height: '38px',
+    margin: '0px',
+    fontSize: '.9rem',
+    borderRadius: '8px',
+    borderColor: state.isFocused ? '#0d9488' : '#e2e8f0',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(13, 148, 136, .15)' : 'none',
+    '&:hover': { borderColor: state.isFocused ? '#0d9488' : '#cbd5e1' },
   }),
   valueContainer: (provided) => ({
     ...provided,
-    height: '30px',
-    padding: '0 6px',
+    height: '36px',
+    padding: '0 8px',
   }),
   input: (provided) => ({
     ...provided,
     margin: '0px',
   }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: '#94a3b8',
+  }),
   indicatorsContainer: (provided) => ({
     ...provided,
-    height: '40px',
+    height: '36px',
+  }),
+  menu: (provided) => ({
+    ...provided,
+    fontSize: '.9rem',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    zIndex: 40,
   }),
 };
 
@@ -75,7 +94,7 @@ const TestNameDropdown = ({ formData, onTestNameChange }) => {
 
   return (
     <div className="block mb-1">
-      <label className="block mb-1">Test Name:</label>
+      <label className="block mb-1">Test Name</label>
       <Select
         options={options}
         value={options.find(option => option.value === formData.mainTestName) || { value: inputValue, label: inputValue }}
@@ -85,7 +104,7 @@ const TestNameDropdown = ({ formData, onTestNameChange }) => {
         onKeyDown={handleKeyDown}
         isClearable
         placeholder="Select or type to search..."
-        className="w-full rounded"
+        
         styles={customStyles}
       />
     </div>
