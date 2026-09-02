@@ -143,7 +143,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange, getRangeS
                 </table>}
             </div>
             <h4 className='endLine'>-----End Of Report----</h4>
-            <div className="flex justify-between mt-2" style={{ marginLeft: '4rem', marginRight: '4rem' }}>
+            <div className="flex justify-between mt-2" style={{ marginLeft: '10rem', marginRight: '10rem' }}>
                 <div className="flex flex-col items-center" style={{ lineHeight: '0rem' }}>
                     <div className="w-27 h-10" />
                     <p className="font-bold" style={{ fontSize: '0.7rem' }}>LAB TECHNICIAN</p>
