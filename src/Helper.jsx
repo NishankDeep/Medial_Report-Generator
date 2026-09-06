@@ -269,20 +269,22 @@ export const isFontBold = (testName) => {
 
   return testNameToBold.includes(changeCase) ? true : false;
 }
-// (H)/(L) markers are shown only on the CBC panel, and only for these four tests
+// (H)/(L) markers are shown on the CBC and HB% panels, and only for these four tests
 export const showRangeFlag = (mainTestName, testName) => {
   if (mainTestName == null || testName == null) return false;
 
-  const panel = mainTestName.toLowerCase();
-  if (!panel.includes("complete blood count") && !panel.includes("cbc")) return false;
+  const panel = mainTestName.toLowerCase().trim();
+  const isCbcPanel = panel.includes("complete blood count") || panel.includes("cbc");
+  const isHbPanel = panel.startsWith("hb%") || panel === "hb";
+  if (!isCbcPanel && !isHbPanel) return false;
 
   const flaggedTests = ["haemoglobin(hb)", "total wbc count", "r.b.c. count", "platelets count"];
 
   return flaggedTests.includes(testName.toLowerCase().trim());
 }
 
-// the HB% report shows how far the result is from its range, as a percentage
-// instead of an (H)/(L) marker
+// the HB% report shows the result as a percentage of its upper bound,
+// alongside the (H)/(L) marker. Only low results carry a percentage.
 export const showDeficiencyPercent = (mainTestName, testName) => {
   if (mainTestName == null || testName == null) return false;
 

@@ -16,7 +16,8 @@ const DisplayPatientData = (prop) => {
         return '';
     };
 
-    // HB%: the percentage sits on its own line under the result
+    // HB%: the percentage sits on its own line under the result, and only when
+    // the result is below range (high results get the (H) marker alone)
     const deviationLabel = (test, report) => {
         if (!showDeficiencyPercent(report.mainTestName, test.testName) || !getRangeDeviation) return '';
         const { status, percent } = getRangeDeviation(test.result, test.bioRefInterval, report.gender, report.age);

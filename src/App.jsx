@@ -233,12 +233,12 @@ function App() {
             pdf.setFont('helvetica', 'bold');
             pdf.text('SPARSH LAB', 40, 18); // Shifted down by 3 units
             pdf.setFontSize(10);
-            pdf.text('Majore More Road', 40, 23); // Shifted down by 3 units
-            pdf.text('Hamidganj, 822101', 40, 28); // Shifted down by 3 units
-            pdf.text('Email : sparshclinicdaltonganj@gmail.com', 40, 33); // Shifted down by 3 units
+            pdf.text('POLICE LINE, MAJOR MORE ROAD', 40, 23); // Shifted down by 3 units
+            pdf.text('HAMIDGANJ, DALTONGANJ, 822101', 40, 28); // Shifted down by 3 units
+            pdf.text('EMAIL : sparshclinicdaltonganj@gmail.com', 40, 33); // Shifted down by 3 units
             pdf.addImage(Microscope, 'PNG', 183.5, 13.5, 15, 15,undefined, 'SLOW'); // Shifted down by 3 units
-            pdf.text('Sparsh Clinic Daltonganj', 142, 28); // Shifted down by 3 units
-            pdf.text('PHARMACY, LAB, CLINIC', 142, 33); // Shifted down by 3 units
+            pdf.text('SPARSH CLINIC DALTONGANJ', 181, 28, { align: 'right' });
+            pdf.text('PHARMACY, LAB, CLINIC', 181, 33, { align: 'right' });
             pdf.setLineWidth(1.5);
             pdf.line(10, 38, 200, 38); // Shifted down by 3 units
           };
@@ -248,7 +248,7 @@ function App() {
           const addFooter = (pdf, pageNumber) => {
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
-            pdf.text('MAJORE MORE ROAD, HAMIDGANJ', 105, pageHeight - 15, { align: 'center' });
+            pdf.text('POLICE LINE, MAJOR MORE ROAD, HAMIDGANJ, DALTONGANJ, 822101', 105, pageHeight - 15, { align: 'center' });
             pdf.text('PHONE NO - 9470944040, 9470944422', 105, pageHeight - 10, { align: 'center' });
             pdf.setTextColor(255, 0, 0);
             pdf.text('WISHING YOU A GOOD LIFE AND BE HEALTHY', 105, pageHeight - 5, { align: 'center' });
@@ -355,9 +355,11 @@ const normalizeGender = (gender) => {
     return null;
 };
 
-// how far a result sits outside its bio ref range.
-// status: 'H' above, 'L' below, '' inside. percent is measured against the
-// bound that was crossed, i.e. 16.7 is 100% so a result of 17 is 1.8% over.
+// where a result sits relative to its bio ref range.
+// status: 'H' above, 'L' below, '' inside.
+// percent is only meaningful below the range: the upper bound counts as 100%,
+// so 10.2 against a 12.0-15.0 range reads as 68%. Above the range there is no
+// percentage, only the (H) marker.
 const getRangeDeviation = (result, bioRefInterval, gender, age) => {
     const inRange = { status: '', percent: null };
     if (bioRefInterval == null || bioRefInterval === '') return inRange;
@@ -379,10 +381,11 @@ const getRangeDeviation = (result, bioRefInterval, gender, age) => {
 
     for (const { min, max } of ranges) {
         if (min != null && !isNaN(min) && value < min) {
-            return { status: 'L', percent: min === 0 ? null : ((min - value) / min) * 100 };
+            const hasUpperBound = max != null && !isNaN(max) && max !== 0;
+            return { status: 'L', percent: hasUpperBound ? (value / max) * 100 : null };
         }
         if (max != null && !isNaN(max) && value > max) {
-            return { status: 'H', percent: max === 0 ? null : ((value - max) / max) * 100 };
+            return { status: 'H', percent: null };
         }
     }
     return inRange;
@@ -487,7 +490,7 @@ const isValueOutOfRange = (result, bioRefInterval, gender, age) => {
                   <>
                     {/* component that contain the info of patient */}
                     <PatientInfoBox currentReport={currentReport} />
-                    <div className='transparent-bg' style={{ paddingBottom: '25%' }}>
+                    <div className='transparent-bg'>
                       <div className=" font-semibold text-center pb-4" style={{ marginBottom: '0', fontSize: '1rem', lineHeight: '0', paddingTop:'1rem' }}>{!currentReport.mainTestName.toLowerCase().includes('optimal test') && currentReport.mainTestName}</div>
                   {/* Result Table */}
                       <ResultTableContent currentReport={currentReport} isValueOutOfRange={isValueOutOfRange} getRangeStatus={getRangeStatus} getRangeDeviation={getRangeDeviation} />

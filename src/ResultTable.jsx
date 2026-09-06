@@ -78,7 +78,8 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange, getRangeS
         return status ? ` (${status})` : '';
     };
 
-    // HB% report: distance from the range as a percentage, not an (H)/(L) marker
+    // HB% report: the result as a percentage of its upper bound, shown under the
+    // result. Only low results carry one; high results get the (H) marker alone.
     const deviationLabel = (test) => {
         if (typeof getRangeDeviation !== 'function') return '';
         if (!showDeficiencyPercent(currentReport.mainTestName, test.testName)) return '';
@@ -93,7 +94,7 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange, getRangeS
     }
     
     return (
-        <div style={{ marginRight: '1rem', marginLeft: '1rem' }}> {/* Added margin-right here */}
+        <div style={{ marginRight: '1rem', marginLeft: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <div className="overflow-x-auto overflow-y-auto ml-8 mr-12" style={{ paddingBottom: '2rem' }}>
                 {isUrineTest &&
                     <>
@@ -143,15 +144,16 @@ export const ResultTableContent = ({ currentReport, isValueOutOfRange, getRangeS
                 </table>}
             </div>
             <h4 className='endLine'>-----End Of Report----</h4>
-            <div className="flex justify-between mt-2" style={{ marginLeft: '10rem', marginRight: '10rem' }}>
-                <div className="flex flex-col items-center" style={{ lineHeight: '0rem' }}>
+            <div className="flex justify-between items-end" style={{ marginLeft: '10rem', marginRight: '10rem', marginTop: 'auto', paddingTop: '2rem', paddingBottom: '1rem' }}>
+                <div className="flex flex-col items-center">
                     <div className="w-27 h-10" />
-                    <p className="font-bold" style={{ fontSize: '0.7rem' }}>LAB TECHNICIAN</p>
+                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '1.2', margin: 0 }}>MANISH</p>
+                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '1.2', margin: 0 }}>LAB TECHNICIAN</p>
                 </div>
-                <div className="flex flex-col items-center h-40" style={{ lineHeight: '1rem' }}>
+                <div className="flex flex-col items-center">
                     <img src={DoctorSign} alt="DR. AUBHUTI CHOUDHARY" className="w-28 h-10 z-50" />
-                    <p className="font-bold" style={{ fontSize: '0.7rem' }}>DR. AUBHUTI CHOUDHARY</p>
-                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '0.2rem' }}>M.D PATHOLOGY</p>
+                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '1.2', margin: 0 }}>DR. AUBHUTI CHOUDHARY</p>
+                    <p className="font-bold" style={{ fontSize: '0.7rem', lineHeight: '1.2', margin: 0 }}>M.D PATHOLOGY</p>
                 </div>
             </div>
         </div>
