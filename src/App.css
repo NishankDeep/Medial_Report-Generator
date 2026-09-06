@@ -172,8 +172,22 @@ button {
   background-size: 550px 500px;
   background-position: top;
   background-repeat: no-repeat;
-  padding-bottom: 10rem;
+  /* grows to fill the page so the signature row can sit at the bottom */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
+/* html2canvas captures this element and the result is drawn onto the PDF at
+   210mm wide, starting 35mm down, with the footer taking the last ~19mm.
+   Sizing it to that band (A4 at 96dpi) makes one screen page one PDF page,
+   so anything pushed to the bottom here lands above the printed footer.
+   min-height, not height, so longer reports still flow onto further pages. */
+.preview-content {
+  width: 794px;
+  min-height: 880px;
+  display: flex;
+  flex-direction: column;
 }
 /* =========================================================================
    Modern screen UI. Scoped to .app-shell so the printed report markup
